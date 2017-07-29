@@ -1,5 +1,7 @@
-package com.madetech.clean.boundary
+package com.madetech.clean
 
+import com.madetech.clean.boundary.AsynchronousUseCaseExecutor
+import com.madetech.clean.boundary.SynchronousUseCaseExecutor
 import com.madetech.clean.usecase.AsynchronousUseCase
 import com.madetech.clean.usecase.SynchronousUseCase
 import kotlin.reflect.KClass
