@@ -6,7 +6,6 @@ import org.jetbrains.spek.api.Spek
 import org.jetbrains.spek.api.dsl.given
 import org.jetbrains.spek.api.dsl.it
 import uk.co.craigbass.pratura.domain.BasketItem
-import uk.co.craigbass.pratura.usecase.BasketItemsGateway
 import uk.co.craigbass.pratura.usecase.BasketItemsRetriever
 import uk.co.craigbass.pratura.usecase.ViewBasket
 
