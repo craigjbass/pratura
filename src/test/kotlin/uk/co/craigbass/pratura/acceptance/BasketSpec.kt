@@ -5,6 +5,7 @@ import org.amshove.kluent.shouldBeEmpty
 import org.jetbrains.spek.api.Spek
 import org.jetbrains.spek.api.dsl.given
 import org.jetbrains.spek.api.dsl.it
+import uk.co.craigbass.pratura.boundary.AddItemToBasket.AddItemToBasketRequest
 import uk.co.craigbass.pratura.testdouble.InMemoryBasketItemsGateway
 import uk.co.craigbass.pratura.usecase.AddItemToBasket
 import uk.co.craigbass.pratura.usecase.ViewBasket
@@ -16,9 +17,9 @@ class BasketSpec : Spek({
 
     val basketContents = memoized { viewBasket.execute() }
 
-    given("no items are added to the basket") {
-        it("should contain no items") {
-            basketContents().items.shouldBeEmpty()
+    given("no lineItems are added to the basket") {
+        it("should contain no lineItems") {
+            basketContents().lineItems.shouldBeEmpty()
         }
 
         it("should have a total value of zero") {
@@ -30,12 +31,21 @@ class BasketSpec : Spek({
         val addItemToBasket = AddItemToBasket(basketItemsGateway())
 
         beforeEachTest {
-            addItemToBasket.execute()
+            addItemToBasket.execute(AddItemToBasketRequest(1, "productsku"))
         }
 
+        val lineItems = memoized { basketContents().lineItems }
+
         it("should contain one item") {
-            basketContents().items.count().shouldBe(1)
+            lineItems().count().shouldBe(1)
+        }
+
+        it("should have the correct sku") {
+            lineItems().first().sku.shouldBe("productsku")
+        }
+
+        it("should have the correct quantity") {
+            lineItems().first().quantity.shouldBe(1)
         }
     }
 })
-

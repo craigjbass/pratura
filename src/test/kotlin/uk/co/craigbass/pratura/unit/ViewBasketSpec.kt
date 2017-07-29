@@ -6,22 +6,23 @@ import org.jetbrains.spek.api.Spek
 import org.jetbrains.spek.api.dsl.given
 import org.jetbrains.spek.api.dsl.it
 import uk.co.craigbass.pratura.domain.BasketItem
-import uk.co.craigbass.pratura.usecase.BasketItemsRetriever
+import uk.co.craigbass.pratura.testdouble.StubBasketItemsRetriever
 import uk.co.craigbass.pratura.usecase.ViewBasket
 
 class ViewBasketSpec : Spek({
-    var viewBasket: ViewBasket? = null
-    val basketContents = memoized { viewBasket!!.execute() }
+    var basketItems: List<BasketItem> = listOf()
 
-    given("no items are added to the basket") {
+    val basketItemsRetriever = memoized { StubBasketItemsRetriever(basketItems) }
+    val viewBasket = memoized { ViewBasket(basketItemsRetriever()) }
+    val basketContents = memoized { viewBasket().execute() }
+
+    given("no lineItems are added to the basket") {
         beforeEachTest {
-            viewBasket = ViewBasket(object : BasketItemsRetriever {
-                override fun all(): List<BasketItem> = listOf()
-            })
+            basketItems = listOf()
         }
 
-        it("should contain no items") {
-            basketContents().items.shouldBeEmpty()
+        it("should contain no lineItems") {
+            basketContents().lineItems.shouldBeEmpty()
         }
 
         it("should have a total value of zero") {
@@ -29,17 +30,31 @@ class ViewBasketSpec : Spek({
         }
     }
 
-    given("one item is in the basket") {
+    given("one aproductsku is in the basket") {
         beforeEachTest {
-            viewBasket = ViewBasket(object : BasketItemsRetriever {
-                override fun all(): List<BasketItem> {
-                    return listOf(BasketItem())
-                }
-            })
+            basketItems = listOf(BasketItem(1, "aproductsku"))
         }
 
-        it("should contain no items") {
-            basketContents().items.count().shouldBe(1)
+        it("should contain one line item") {
+            basketContents().lineItems.count().shouldBe(1)
+        }
+
+        it("should have the correct quantity") {
+            basketContents().lineItems.first().quantity.shouldBe(1)
+        }
+
+        it("should have the correct sku") {
+            basketContents().lineItems.first().sku.shouldBe("aproductsku")
+        }
+    }
+
+    given("one sku:58371 is in the basket") {
+        beforeEachTest {
+            basketItems = listOf(BasketItem(1, "sku:58371"))
+        }
+
+        it("should have the correct sku") {
+            basketContents().lineItems.first().sku.shouldBe("sku:58371")
         }
     }
 })
