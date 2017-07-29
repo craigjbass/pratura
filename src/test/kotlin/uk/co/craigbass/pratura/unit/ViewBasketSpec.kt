@@ -14,7 +14,7 @@ class ViewBasketSpec : Spek({
 
     val basketItemsRetriever = memoized { StubBasketItemsRetriever(basketItems) }
     val viewBasket = memoized { ViewBasket(basketItemsRetriever()) }
-    val basketContents = memoized { viewBasket().execute() }
+    val basketContents = memoized { viewBasket().execute(Unit) }
 
     given("no lineItems are added to the basket") {
         beforeEachTest {

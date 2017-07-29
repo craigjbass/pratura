@@ -5,17 +5,14 @@ import org.amshove.kluent.shouldBeEmpty
 import org.jetbrains.spek.api.Spek
 import org.jetbrains.spek.api.dsl.given
 import org.jetbrains.spek.api.dsl.it
-import uk.co.craigbass.pratura.boundary.AddItemToBasket.AddItemToBasketRequest
-import uk.co.craigbass.pratura.testdouble.InMemoryBasketItemsGateway
-import uk.co.craigbass.pratura.usecase.AddItemToBasket
-import uk.co.craigbass.pratura.usecase.ViewBasket
+import uk.co.craigbass.pratura.InMemoryPratura
+import uk.co.craigbass.pratura.boundary.AddItemToBasket
+import uk.co.craigbass.pratura.boundary.AddItemToBasket.Request
+import uk.co.craigbass.pratura.boundary.ViewBasket
 
 class BasketSpec : Spek({
-    val basketItemsGateway = memoized { InMemoryBasketItemsGateway() }
-
-    val viewBasket = ViewBasket(basketItemsGateway())
-
-    val basketContents = memoized { viewBasket.execute() }
+    val pratura = memoized { InMemoryPratura() }
+    val basketContents = memoized { pratura().executeUseCase(ViewBasket::class, Unit) }
 
     given("no lineItems are added to the basket") {
         it("should contain no lineItems") {
@@ -28,10 +25,8 @@ class BasketSpec : Spek({
     }
 
     given("one item is in the basket") {
-        val addItemToBasket = AddItemToBasket(basketItemsGateway())
-
         beforeEachTest {
-            addItemToBasket.execute(AddItemToBasketRequest(1, "productsku"))
+            pratura().executeUseCase(AddItemToBasket::class, Request(1, "productsku"))
         }
 
         val lineItems = memoized { basketContents().lineItems }
