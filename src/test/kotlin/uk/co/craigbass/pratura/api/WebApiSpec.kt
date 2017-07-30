@@ -2,16 +2,17 @@ package uk.co.craigbass.pratura.api
 
 import com.github.kittinunf.fuel.httpPost
 import com.github.salomonbrys.kotson.jsonObject
-import org.amshove.kluent.shouldBe
 import org.amshove.kluent.shouldEqual
 import org.jetbrains.spek.api.Spek
 import org.jetbrains.spek.api.dsl.describe
 import org.jetbrains.spek.api.dsl.given
 import org.jetbrains.spek.api.dsl.it
+import uk.co.craigbass.pratura.boundary.AddItemToBasket.Request
 import uk.co.craigbass.pratura.http.AddToBasketController
 import uk.co.craigbass.pratura.http.WebServer
-import uk.co.craigbass.pratura.testdouble.SpyAddToBasket
+import uk.co.craigbass.pratura.testdouble.SpyUseCaseExecutor
 
+@Suppress("UNCHECKED_CAST")
 class WebApiSpec : Spek({
     val webServer = memoized { WebServer() }
 
@@ -32,13 +33,13 @@ class WebApiSpec : Spek({
     }
 
     describe("add to basket controller") {
-        val spyUseCase = memoized { SpyAddToBasket() }
+        val spyUseCase = memoized { SpyUseCaseExecutor(Unit) }
 
         beforeEachTest {
             webServer().addController(AddToBasketController(spyUseCase()))
         }
 
-        val subject = memoized { spyUseCase().requestsReceived }
+        val subject = memoized { spyUseCase().requestsReceived as List<Request> }
 
         given("a web request is made to add item to basket") {
             beforeEachTest {
