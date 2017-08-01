@@ -30,6 +30,18 @@ class AddItemToBasketSpec : Spek({
     }
   }
 
+  given("basket contains nothing and two of one item is added to basket") {
+    beforeEachTest {
+      basketItems = listOf()
+      addItemToBasket().execute(Request(2, "sku"))
+    }
+
+    it("saves a new item to the basket") {
+      basketItemsGateway().lastSavedItem().quantity.shouldBe(2)
+      basketItemsGateway().lastSavedItem().sku.shouldBe("sku")
+    }
+  }
+
   given("one item is already in the basket") {
     beforeEachTest {
       basketItems = listOf(BasketItem(1, "sku"))
