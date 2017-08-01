@@ -20,13 +20,23 @@ class ViewBasketSpec : Spek({
   }
   val basketContents = memoized { viewBasket().execute(Unit) }
 
-  given("no lineItems are added to the basket") {
-    it("should contain no lineItems") {
+  given("no line items are in the basket") {
+    it("should contain no items") {
       basketContents().lineItems.shouldBeEmpty()
     }
 
     it("should have a total value of zero") {
       basketContents().basketValue.shouldEqual("£0.00")
+    }
+
+    context("and there is a product in the catalogue worth 0.01") {
+      beforeEachTest {
+        products = listOf(Product("1234", "0.01".toDecimal()))
+      }
+
+      it("should have a total value of zero") {
+        basketContents().basketValue.shouldEqual("£0.00")
+      }
     }
   }
 
@@ -65,11 +75,16 @@ class ViewBasketSpec : Spek({
 
   given("two sku:58381 is in the basket") {
     beforeEachTest {
+      products = listOf(Product("sku:58381", "1.23".toDecimal()))
       basketItems = listOf(BasketItem(2, "sku:58381"))
     }
 
     it("should have the correct sku") {
       basketContents().lineItems.first().quantity.shouldBe(2)
+    }
+
+    it("should have a basket value of £2.46") {
+      basketContents().basketValue.shouldEqual("£2.46")
     }
   }
 })

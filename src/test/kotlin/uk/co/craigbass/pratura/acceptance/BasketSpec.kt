@@ -23,8 +23,8 @@ class BasketSpec : Spek({
       basketContents().lineItems.shouldBeEmpty()
     }
 
-    it("should have a total value of £5.00") {
-      basketContents().basketValue.shouldEqual("£5.00")
+    it("should have a total value of £0.00") {
+      basketContents().basketValue.shouldEqual("£0.00")
     }
   }
 
@@ -39,6 +39,10 @@ class BasketSpec : Spek({
 
     it("should contain one item") {
       lineItems().count().shouldBe(1)
+    }
+
+    it("should have a total value of £5.00") {
+      basketContents().basketValue.shouldEqual("£5.00")
     }
 
     it("should have the correct sku") {
@@ -63,6 +67,10 @@ class BasketSpec : Spek({
 
       it("should only have one line item") {
         lineItems().count().shouldBe(1)
+      }
+
+      it("should have a total value of £5.00") {
+        basketContents().basketValue.shouldEqual("£10.00")
       }
     }
   }
