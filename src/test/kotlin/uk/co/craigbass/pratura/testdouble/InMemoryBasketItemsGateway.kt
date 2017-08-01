@@ -4,13 +4,14 @@ import uk.co.craigbass.pratura.domain.BasketItem
 import uk.co.craigbass.pratura.gateway.BasketItemsGateway
 
 class InMemoryBasketItemsGateway : BasketItemsGateway {
-    val items = mutableListOf<BasketItem>()
+  val items = mutableListOf<BasketItem>()
 
-    override fun save(item: BasketItem) {
-        items.add(item)
-    }
+  override fun save(item: BasketItem) {
+    items.removeIf { it.sku == item.sku }
+    items.add(item)
+  }
 
-    override fun all(): List<BasketItem> {
-        return items
-    }
+  override fun all(): List<BasketItem> {
+    return items
+  }
 }
