@@ -3,8 +3,6 @@ package uk.co.craigbass.pratura.boundary
 import com.madetech.clean.Application
 import com.madetech.clean.usecase.*
 import uk.co.craigbass.pratura.usecase.*
-import uk.co.craigbass.pratura.usecase.ProductSaver
-import uk.co.craigbass.pratura.usecase.ProductRetriever
 import kotlin.reflect.KClass
 
 abstract class Pratura : Application() {

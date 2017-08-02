@@ -1,6 +1,5 @@
 package uk.co.craigbass.pratura.gateway
 
-import uk.co.craigbass.pratura.usecase.ProductSaver
-import uk.co.craigbass.pratura.usecase.ProductRetriever
+import uk.co.craigbass.pratura.usecase.*
 
 interface ProductGateway : ProductSaver, ProductRetriever

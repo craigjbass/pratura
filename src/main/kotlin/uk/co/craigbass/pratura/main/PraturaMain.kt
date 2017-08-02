@@ -5,8 +5,6 @@ import uk.co.craigbass.pratura.domain.*
 import uk.co.craigbass.pratura.gateway.BasketItemsGateway
 import uk.co.craigbass.pratura.http.*
 import uk.co.craigbass.pratura.usecase.*
-import uk.co.craigbass.pratura.usecase.ProductSaver
-import uk.co.craigbass.pratura.usecase.ProductRetriever
 
 fun main(args: Array<String>) {
   val webServer = WebServer()
@@ -17,13 +15,10 @@ fun main(args: Array<String>) {
 class StandInPratura : Pratura(), BasketItemsGateway, ProductSaver {
   override val productRetriever: ProductRetriever
     get() = StandInProductRetriever()
-
   override val productSaver: ProductSaver
     get() = this
-
   override val basketItemSaver: BasketItemSaver
     get() = this
-
   override val basketItemsRetriever: BasketItemsRetriever
     get() = this
 

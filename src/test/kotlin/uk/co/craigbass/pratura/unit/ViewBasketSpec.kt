@@ -7,7 +7,6 @@ import uk.co.craigbass.pratura.domain.*
 import uk.co.craigbass.pratura.math.toDecimal
 import uk.co.craigbass.pratura.testdouble.*
 import uk.co.craigbass.pratura.usecase.ViewBasket
-import java.math.BigDecimal
 import java.math.BigDecimal.ONE
 
 class ViewBasketSpec : Spek({
