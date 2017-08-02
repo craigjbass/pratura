@@ -14,7 +14,11 @@ class BasketSpec : Spek({
   beforeEachTest {
     pratura().executeUseCase(
       AddProduct::class,
-      AddProduct.Request("productsku", "5.00".toDecimal())
+      AddProduct.Request(
+        sku = "productsku",
+        price = "5.00".toDecimal(),
+        name = "Chocolate Bar"
+      )
     )
   }
 
@@ -32,7 +36,10 @@ class BasketSpec : Spek({
     beforeEachTest {
       pratura().executeUseCase(
         AddItemToBasket::class,
-        AddItemToBasket.Request(1, "productsku")
+        AddItemToBasket.Request(
+          quantity = 1,
+          sku = "productsku"
+        )
       )
     }
     val lineItems = memoized { basketContents().lineItems }
@@ -53,11 +60,18 @@ class BasketSpec : Spek({
       lineItems().first().quantity.shouldBe(1)
     }
 
+    it("should have the correct name") {
+      lineItems().first().name.shouldEqual("Chocolate Bar")
+    }
+
     given("the same item is added again") {
       beforeEachTest {
         pratura().executeUseCase(
           AddItemToBasket::class,
-          AddItemToBasket.Request(1, "productsku")
+          AddItemToBasket.Request(
+            quantity = 1,
+            sku = "productsku"
+          )
         )
       }
 
@@ -71,6 +85,40 @@ class BasketSpec : Spek({
 
       it("should have a total value of £5.00") {
         basketContents().basketValue.shouldEqual("£10.00")
+      }
+    }
+
+    given("a different item is added") {
+      beforeEachTest {
+        pratura().executeUseCase(
+          AddProduct::class,
+          AddProduct.Request(
+            sku = "sku:1",
+            price = "6.24".toDecimal(),
+            name = "Picture Frame"
+          )
+        )
+
+        pratura().executeUseCase(
+          AddItemToBasket::class,
+          AddItemToBasket.Request(
+            quantity = 1,
+            sku = "sku:1"
+          )
+        )
+      }
+      val secondLineItem = memoized { lineItems()[1] }
+
+      it("should have a second line item with name picture frame") {
+        secondLineItem().name.shouldEqual("Picture Frame")
+      }
+
+      it("should have a second line item with sku sku:1") {
+        secondLineItem().sku.shouldEqual("sku:1")
+      }
+
+      it("should have a second line item with sku sku:1") {
+        secondLineItem().quantity.shouldEqual(1)
       }
     }
   }

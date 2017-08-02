@@ -25,6 +25,7 @@ abstract class Pratura : Application() {
         productRetriever
       )
       AddProduct::class -> uk.co.craigbass.pratura.usecase.AddProduct(productSaver)
+      ViewAllProducts::class -> uk.co.craigbass.pratura.usecase.ViewAllProducts(productRetriever)
       else -> throw Exception("Use Case Not Found")
     }
   }

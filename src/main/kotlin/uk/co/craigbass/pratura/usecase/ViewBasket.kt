@@ -18,7 +18,15 @@ class ViewBasket(private val basketItemsGateway: BasketItemsRetriever,
     return PresentableBasket(lineItems(), "£${getBasketValue()}")
   }
 
-  private fun lineItems() = items!!.map { item -> PresentableLineItem(item.quantity, item.sku) }
+  private fun lineItems(): List<PresentableLineItem> {
+    return items!!.map { item ->
+      PresentableLineItem(
+        quantity = item.quantity,
+        sku = item.sku,
+        name = getProductFor(item)?.name ?: ""
+      )
+    }
+  }
 
   private fun getBasketValue(): String? {
     return items!!
