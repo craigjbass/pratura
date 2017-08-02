@@ -12,21 +12,19 @@ class ViewBasket(private val basketItemsGateway: BasketItemsRetriever,
   override fun execute(request: Unit): PresentableBasket {
     val pricedLineItems = pricedLineItems()
     return PresentableBasket(
-      lineItems = getLineItems(pricedLineItems),
+      lineItems = pricedLineItems.map(this::getPresentableLineItem),
       basketValue = getBasketTotal(pricedLineItems)
     )
   }
 
-  private fun getLineItems(pricedLineItems: List<PricedLineItem>): List<PresentableLineItem> {
-    return pricedLineItems.map { pricedLineItem ->
-      PresentableLineItem(
-        quantity = pricedLineItem.getQuantity().toInt(),
-        sku = pricedLineItem.getSku(),
-        name = pricedLineItem.getName(),
-        unitPrice = pricedLineItem.getUnitPriceAsCurrency(),
-        total = pricedLineItem.getTotalAsCurrency()
-      )
-    }
+  private fun getPresentableLineItem(pricedLineItem: PricedLineItem): PresentableLineItem {
+    return PresentableLineItem(
+      quantity = pricedLineItem.getQuantity().toInt(),
+      sku = pricedLineItem.getSku(),
+      name = pricedLineItem.getName(),
+      unitPrice = pricedLineItem.getUnitPriceAsCurrency(),
+      total = pricedLineItem.getTotalAsCurrency()
+    )
   }
 
   private fun getBasketTotal(pricedLineItems: List<PricedLineItem>): String {
@@ -40,7 +38,7 @@ class ViewBasket(private val basketItemsGateway: BasketItemsRetriever,
     val products = productRetriever.all()
     return getBasketItems().map { item ->
       val product = products.find { p -> item.sku == p.sku }
-      PricedLineItem(item, product)
+      PricedLineItem(item, product!!)
     }
   }
 
@@ -48,12 +46,12 @@ class ViewBasket(private val basketItemsGateway: BasketItemsRetriever,
 
   private fun List<BigDecimal>.getSumOfTotals() = fold(ZERO) { a, b -> a + b }
 
-  class PricedLineItem(val item: BasketItem, val product: Product?) {
+  class PricedLineItem(val item: BasketItem, val product: Product) {
     fun getQuantity() = item.quantity.toDecimal()
-    fun getName() = product?.name ?: ""
+    fun getName() = product.name
     fun getSku() = item.sku
 
-    fun getUnitPrice() = product?.price ?: ZERO
+    fun getUnitPrice() = product.price
     fun getTotal() = getUnitPrice() * getQuantity()
 
     fun getUnitPriceAsCurrency() = getUnitPrice().toCurrencyWithSymbol()
