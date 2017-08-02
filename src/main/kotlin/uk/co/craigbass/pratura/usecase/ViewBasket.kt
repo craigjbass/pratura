@@ -3,46 +3,60 @@ package uk.co.craigbass.pratura.usecase
 import uk.co.craigbass.pratura.boundary.ViewBasket
 import uk.co.craigbass.pratura.boundary.ViewBasket.*
 import uk.co.craigbass.pratura.domain.*
+import uk.co.craigbass.pratura.math.*
 import java.math.BigDecimal
 import java.math.BigDecimal.ZERO
 
 class ViewBasket(private val basketItemsGateway: BasketItemsRetriever,
                  private val productRetriever: ProductRetriever) : ViewBasket {
-  private var items: List<BasketItem>? = null
-  private var products: List<Product>? = null
-
   override fun execute(request: Unit): PresentableBasket {
-    items = basketItemsGateway.all()
-    products = productRetriever.all()
-
-    return PresentableBasket(lineItems(), "£${getBasketValue()}")
+    val pricedLineItems = pricedLineItems()
+    return PresentableBasket(
+      lineItems = getLineItems(pricedLineItems),
+      basketValue = getBasketTotal(pricedLineItems)
+    )
   }
 
-  private fun lineItems(): List<PresentableLineItem> {
-    return items!!.map { item ->
+  private fun getLineItems(pricedLineItems: List<PricedLineItem>): List<PresentableLineItem> {
+    return pricedLineItems.map { pricedLineItem ->
       PresentableLineItem(
-        quantity = item.quantity,
-        sku = item.sku,
-        name = getProductFor(item)?.name ?: ""
+        quantity = pricedLineItem.getQuantity().toInt(),
+        sku = pricedLineItem.getSku(),
+        name = pricedLineItem.getName(),
+        unitPrice = pricedLineItem.getUnitPriceAsCurrency(),
+        total = pricedLineItem.getTotalAsCurrency()
       )
     }
   }
 
-  private fun getBasketValue(): String? {
-    return items!!
-      .map(this::toPricedLineItem)
-      .map(this::toLineItemTotal)
+  private fun getBasketTotal(pricedLineItems: List<PricedLineItem>): String {
+    return pricedLineItems
+      .map(PricedLineItem::getTotal)
       .getSumOfTotals()
-      .toCurrencyString()
+      .toCurrencyWithSymbol()
   }
 
-  private fun toLineItemTotal(lineItem: PricedLineItem) = lineItem.getQuantity() * lineItem.getItemPrice()
+  private fun pricedLineItems(): List<PricedLineItem> {
+    val products = productRetriever.all()
+    return getBasketItems().map { item ->
+      val product = products.find { p -> item.sku == p.sku }
+      PricedLineItem(item, product)
+    }
+  }
 
-  private fun toPricedLineItem(item: BasketItem) = createPricedLineItem(item, getProductFor(item))
-
-  private fun getProductFor(item: BasketItem) = products?.find { p -> item.sku == p.sku }
+  private fun getBasketItems() = basketItemsGateway.all()
 
   private fun List<BigDecimal>.getSumOfTotals() = fold(ZERO) { a, b -> a + b }
 
-  private fun BigDecimal.toCurrencyString() = this.setScale(2).toPlainString()
+  class PricedLineItem(val item: BasketItem, val product: Product?) {
+    fun getQuantity() = item.quantity.toDecimal()
+    fun getName() = product?.name ?: ""
+    fun getSku() = item.sku
+
+    fun getUnitPrice() = product?.price ?: ZERO
+    fun getTotal() = getUnitPrice() * getQuantity()
+
+    fun getUnitPriceAsCurrency() = getUnitPrice().toCurrencyWithSymbol()
+    fun getTotalAsCurrency() = getTotal().toCurrencyWithSymbol()
+  }
 }

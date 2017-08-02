@@ -64,6 +64,14 @@ class BasketSpec : Spek({
       lineItems().first().name.shouldEqual("Chocolate Bar")
     }
 
+    it("should have the line item unit price") {
+      lineItems().first().unitPrice.shouldEqual("£5.00")
+    }
+
+    it("should have the line total price") {
+      lineItems().first().total.shouldEqual("£5.00")
+    }
+
     given("the same item is added again") {
       beforeEachTest {
         pratura().executeUseCase(
@@ -81,6 +89,14 @@ class BasketSpec : Spek({
 
       it("should only have one line item") {
         lineItems().count().shouldBe(1)
+      }
+
+      it("should have the line item unit price") {
+        lineItems().first().unitPrice.shouldEqual("£5.00")
+      }
+
+      it("should have the line total price") {
+        lineItems().first().total.shouldEqual("£10.00")
       }
 
       it("should have a total value of £5.00") {

@@ -66,6 +66,14 @@ class ViewBasketSpec : Spek({
     it("should have the correct name") {
       firstLineItem().name.shouldBe("Watermelon")
     }
+
+    it("should have the correct unit price") {
+      firstLineItem().unitPrice.shouldEqual("£1.23")
+    }
+
+    it("should have the correct line total") {
+      firstLineItem().total.shouldEqual("£1.23")
+    }
   }
 
   given("one sku:58371 is in the basket") {
@@ -90,6 +98,10 @@ class ViewBasketSpec : Spek({
 
     it("should have a basket value of £2.46") {
       basketContents().basketValue.shouldEqual("£2.46")
+    }
+
+    it("should have the correct line total") {
+      firstLineItem().total.shouldEqual("£2.46")
     }
   }
 })
