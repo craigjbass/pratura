@@ -19,17 +19,17 @@ class ViewBasket(private val basketItemsGateway: BasketItemsRetriever,
 
   private fun toPresentableLineItem(pricedLineItem: PricedLineItem): PresentableLineItem {
     return PresentableLineItem(
-      quantity = pricedLineItem.getQuantity().toInt(),
-      sku = pricedLineItem.getSku(),
-      name = pricedLineItem.getName(),
-      unitPrice = pricedLineItem.getUnitPriceAsCurrency(),
-      total = pricedLineItem.getTotalAsCurrency()
+      quantity = pricedLineItem.quantity,
+      sku = pricedLineItem.sku,
+      name = pricedLineItem.name,
+      unitPrice = pricedLineItem.presentableUnitPrice,
+      total = pricedLineItem.presentableTotal
     )
   }
 
   private fun getBasketTotal(pricedLineItems: List<PricedLineItem>): String {
     return pricedLineItems
-      .map(PricedLineItem::getTotal)
+      .map(PricedLineItem::total)
       .getSumOfTotals()
       .toCurrencyWithSymbol()
   }
@@ -46,15 +46,14 @@ class ViewBasket(private val basketItemsGateway: BasketItemsRetriever,
 
   private fun List<BigDecimal>.getSumOfTotals() = fold(ZERO) { a, b -> a + b }
 
-  class PricedLineItem(val item: BasketItem, val product: Product) {
-    fun getQuantity() = item.quantity.toDecimal()
-    fun getName() = product.name
-    fun getSku() = item.sku
+  class PricedLineItem(item: BasketItem, product: Product) {
+    val quantity = item.quantity
+    val name = product.name
+    val sku = item.sku
+    val unitPrice = product.price
+    val total = unitPrice * quantity.toDecimal()
 
-    fun getUnitPrice() = product.price
-    fun getTotal() = getUnitPrice() * getQuantity()
-
-    fun getUnitPriceAsCurrency() = getUnitPrice().toCurrencyWithSymbol()
-    fun getTotalAsCurrency() = getTotal().toCurrencyWithSymbol()
+    val presentableUnitPrice = unitPrice.toCurrencyWithSymbol()
+    val presentableTotal = total.toCurrencyWithSymbol()
   }
 }
