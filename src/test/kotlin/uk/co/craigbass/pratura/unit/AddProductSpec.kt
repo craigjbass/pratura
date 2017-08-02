@@ -9,23 +9,33 @@ import uk.co.craigbass.pratura.testdouble.InMemoryProductGateway
 import uk.co.craigbass.pratura.usecase.AddProduct
 
 class AddProductSpec : Spek({
-
   val productGateway = InMemoryProductGateway()
-
+  val useCase = memoized { AddProduct(productGateway) }
   beforeEachTest {
-    AddProduct(productGateway).execute(Request("sku:1029317", "1.00".toDecimal()))
+    useCase().execute(Request(
+      sku = "sku:1029317",
+      price = "6.99".toDecimal(),
+      name = "Pack of 4 AA Batteries"
+    ))
   }
 
+  val savedProducts = memoized { productGateway.all() }
+  val firstSavedProduct = memoized { savedProducts().first() }
+
   it("should have saved one product") {
-    productGateway.all().count().shouldEqual(1)
+    savedProducts().count().shouldEqual(1)
   }
 
   it("should have the correct sku") {
-    productGateway.all().first().sku.shouldEqual("sku:1029317")
+    firstSavedProduct().sku.shouldEqual("sku:1029317")
   }
 
   it("should have the correct price") {
-    productGateway.all().first().price.shouldEqual("1.00".toDecimal())
+    firstSavedProduct().price.shouldEqual("6.99".toDecimal())
+  }
+
+  it("should have the correct name") {
+    firstSavedProduct().name.shouldEqual("Pack of 4 AA Batteries")
   }
 })
 

@@ -19,6 +19,7 @@ class ViewBasketSpec : Spek({
     )
   }
   val basketContents = memoized { viewBasket().execute(Unit) }
+  val firstLineItem = memoized { basketContents().lineItems.first() }
 
   given("no line items are in the basket") {
     it("should contain no items") {
@@ -31,7 +32,7 @@ class ViewBasketSpec : Spek({
 
     context("and there is a product in the catalogue worth 0.01") {
       beforeEachTest {
-        products = listOf(Product("1234", "0.01".toDecimal()))
+        products = listOf(Product("1234", "0.01".toDecimal(), ""))
       }
 
       it("should have a total value of zero") {
@@ -42,7 +43,7 @@ class ViewBasketSpec : Spek({
 
   given("one aproductsku is in the basket") {
     beforeEachTest {
-      products = listOf(Product("aproductsku", "1.23".toDecimal()))
+      products = listOf(Product("aproductsku", "1.23".toDecimal(), "Watermelon"))
       basketItems = listOf(BasketItem(1, "aproductsku"))
     }
 
@@ -55,11 +56,15 @@ class ViewBasketSpec : Spek({
     }
 
     it("should have the correct quantity") {
-      basketContents().lineItems.first().quantity.shouldBe(1)
+      firstLineItem().quantity.shouldBe(1)
     }
 
     it("should have the correct sku") {
-      basketContents().lineItems.first().sku.shouldBe("aproductsku")
+      firstLineItem().sku.shouldBe("aproductsku")
+    }
+
+    it("should have the correct name") {
+      firstLineItem().name.shouldBe("Watermelon")
     }
   }
 
@@ -69,18 +74,18 @@ class ViewBasketSpec : Spek({
     }
 
     it("should have the correct sku") {
-      basketContents().lineItems.first().sku.shouldBe("sku:58371")
+      firstLineItem().sku.shouldBe("sku:58371")
     }
   }
 
   given("two sku:58381 is in the basket") {
     beforeEachTest {
-      products = listOf(Product("sku:58381", "1.23".toDecimal()))
+      products = listOf(Product("sku:58381", "1.23".toDecimal(),""))
       basketItems = listOf(BasketItem(2, "sku:58381"))
     }
 
     it("should have the correct sku") {
-      basketContents().lineItems.first().quantity.shouldBe(2)
+      firstLineItem().quantity.shouldBe(2)
     }
 
     it("should have a basket value of £2.46") {
