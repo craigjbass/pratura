@@ -7,6 +7,8 @@ import uk.co.craigbass.pratura.domain.*
 import uk.co.craigbass.pratura.math.toDecimal
 import uk.co.craigbass.pratura.testdouble.*
 import uk.co.craigbass.pratura.usecase.ViewBasket
+import java.math.BigDecimal
+import java.math.BigDecimal.ONE
 
 class ViewBasketSpec : Spek({
   var products: List<Product> = listOf()
@@ -78,6 +80,7 @@ class ViewBasketSpec : Spek({
 
   given("one sku:58371 is in the basket") {
     beforeEachTest {
+      products = listOf(Product("sku:58371", ONE, ""))
       basketItems = listOf(BasketItem(1, "sku:58371"))
     }
 
