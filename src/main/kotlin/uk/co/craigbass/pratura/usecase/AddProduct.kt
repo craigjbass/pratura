@@ -9,4 +9,3 @@ class AddProduct(val productSaver: ProductSaver) : AddProduct {
     productSaver.save(Product(request.sku, request.price, request.name))
   }
 }
-
