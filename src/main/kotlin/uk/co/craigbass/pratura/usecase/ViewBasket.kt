@@ -12,12 +12,12 @@ class ViewBasket(private val basketItemsGateway: BasketItemsRetriever,
   override fun execute(request: Unit): PresentableBasket {
     val pricedLineItems = pricedLineItems()
     return PresentableBasket(
-      lineItems = pricedLineItems.map(this::getPresentableLineItem),
+      lineItems = pricedLineItems.map(this::toPresentableLineItem),
       basketValue = getBasketTotal(pricedLineItems)
     )
   }
 
-  private fun getPresentableLineItem(pricedLineItem: PricedLineItem): PresentableLineItem {
+  private fun toPresentableLineItem(pricedLineItem: PricedLineItem): PresentableLineItem {
     return PresentableLineItem(
       quantity = pricedLineItem.getQuantity().toInt(),
       sku = pricedLineItem.getSku(),
