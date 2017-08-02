@@ -38,5 +38,3 @@ class AddProductSpec : Spek({
     firstSavedProduct().name.shouldEqual("Pack of 4 AA Batteries")
   }
 })
-
-
