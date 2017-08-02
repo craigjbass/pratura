@@ -8,6 +8,5 @@ class AddProduct(val productSaver: ProductSaver) : AddProduct {
   override fun execute(request: Request) {
     productSaver.save(Product(request.sku, request.price))
   }
-
 }
 
