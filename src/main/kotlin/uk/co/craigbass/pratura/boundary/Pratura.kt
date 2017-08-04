@@ -2,6 +2,11 @@ package uk.co.craigbass.pratura.boundary
 
 import com.madetech.clean.Application
 import com.madetech.clean.usecase.*
+import uk.co.craigbass.pratura.boundary.usecase.AddItemToBasket
+import uk.co.craigbass.pratura.boundary.usecase.AddProduct
+import uk.co.craigbass.pratura.boundary.usecase.SetStoreCurrency
+import uk.co.craigbass.pratura.boundary.usecase.ViewAllProducts
+import uk.co.craigbass.pratura.boundary.usecase.ViewBasket
 import uk.co.craigbass.pratura.usecase.*
 import uk.co.craigbass.pratura.usecase.CurrencySetter
 import kotlin.reflect.KClass

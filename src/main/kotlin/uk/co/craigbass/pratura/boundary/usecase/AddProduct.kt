@@ -1,7 +1,7 @@
-package uk.co.craigbass.pratura.boundary
+package uk.co.craigbass.pratura.boundary.usecase
 
 import com.madetech.clean.usecase.SynchronousUseCase
-import uk.co.craigbass.pratura.boundary.AddProduct.Request
+import uk.co.craigbass.pratura.boundary.usecase.AddProduct.Request
 import java.math.BigDecimal
 
 interface AddProduct : SynchronousUseCase<Request, Unit> {

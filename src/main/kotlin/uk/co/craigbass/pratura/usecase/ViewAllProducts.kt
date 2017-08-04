@@ -1,7 +1,7 @@
 package uk.co.craigbass.pratura.usecase
 
-import uk.co.craigbass.pratura.boundary.ViewAllProducts
-import uk.co.craigbass.pratura.boundary.ViewAllProducts.PresentableProduct
+import uk.co.craigbass.pratura.boundary.usecase.ViewAllProducts
+import uk.co.craigbass.pratura.boundary.usecase.ViewAllProducts.PresentableProduct
 import uk.co.craigbass.pratura.domain.*
 
 class ViewAllProducts(private val productRetriever: ProductRetriever,

@@ -1,7 +1,7 @@
 package uk.co.craigbass.pratura.usecase
 
-import uk.co.craigbass.pratura.boundary.AddItemToBasket
-import uk.co.craigbass.pratura.boundary.AddItemToBasket.Request
+import uk.co.craigbass.pratura.boundary.usecase.AddItemToBasket
+import uk.co.craigbass.pratura.boundary.usecase.AddItemToBasket.Request
 import uk.co.craigbass.pratura.domain.BasketItem
 
 class AddItemToBasket(private val basketItemSaver: BasketItemSaver,

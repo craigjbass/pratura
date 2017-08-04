@@ -1,7 +1,7 @@
 package uk.co.craigbass.pratura.usecase
 
-import uk.co.craigbass.pratura.boundary.AddProduct
-import uk.co.craigbass.pratura.boundary.AddProduct.Request
+import uk.co.craigbass.pratura.boundary.usecase.AddProduct
+import uk.co.craigbass.pratura.boundary.usecase.AddProduct.Request
 import uk.co.craigbass.pratura.domain.Product
 
 class AddProduct(val productSaver: ProductSaver) : AddProduct {

@@ -3,7 +3,7 @@ package uk.co.craigbass.pratura.unit
 import org.amshove.kluent.shouldEqual
 import org.jetbrains.spek.api.Spek
 import org.jetbrains.spek.api.dsl.it
-import uk.co.craigbass.pratura.boundary.AddProduct.Request
+import uk.co.craigbass.pratura.boundary.usecase.AddProduct.Request
 import uk.co.craigbass.pratura.math.toDecimal
 import uk.co.craigbass.pratura.testdouble.InMemoryProductGateway
 import uk.co.craigbass.pratura.usecase.AddProduct
