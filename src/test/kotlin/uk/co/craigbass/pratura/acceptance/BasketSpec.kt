@@ -4,7 +4,7 @@ import org.amshove.kluent.*
 import org.jetbrains.spek.api.Spek
 import org.jetbrains.spek.api.dsl.*
 import uk.co.craigbass.pratura.InMemoryPratura
-import uk.co.craigbass.pratura.boundary.usecase.*
+import uk.co.craigbass.pratura.boundary.*
 import uk.co.craigbass.pratura.math.toDecimal
 
 class BasketSpec : Spek({

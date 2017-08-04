@@ -5,7 +5,7 @@ import com.github.salomonbrys.kotson.jsonObject
 import org.amshove.kluent.shouldEqual
 import org.jetbrains.spek.api.Spek
 import org.jetbrains.spek.api.dsl.*
-import uk.co.craigbass.pratura.boundary.usecase.AddItemToBasket.Request
+import uk.co.craigbass.pratura.boundary.AddItemToBasket.Request
 import uk.co.craigbass.pratura.http.*
 import uk.co.craigbass.pratura.testdouble.SpyUseCaseExecutor
 

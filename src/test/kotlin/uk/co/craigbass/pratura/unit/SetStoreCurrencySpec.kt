@@ -3,7 +3,7 @@ package uk.co.craigbass.pratura.unit
 import org.amshove.kluent.shouldEqual
 import org.jetbrains.spek.api.Spek
 import org.jetbrains.spek.api.dsl.*
-import uk.co.craigbass.pratura.boundary.usecase.SetStoreCurrency.Request
+import uk.co.craigbass.pratura.boundary.SetStoreCurrency.Request
 import uk.co.craigbass.pratura.domain.Currency
 import uk.co.craigbass.pratura.usecase.SetStoreCurrency
 import uk.co.craigbass.pratura.usecase.CurrencySetter

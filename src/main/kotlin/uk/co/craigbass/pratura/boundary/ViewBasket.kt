@@ -1,7 +1,7 @@
-package uk.co.craigbass.pratura.boundary.usecase
+package uk.co.craigbass.pratura.boundary
 
 import com.madetech.clean.usecase.SynchronousUseCase
-import uk.co.craigbass.pratura.boundary.usecase.ViewBasket.PresentableBasket
+import uk.co.craigbass.pratura.boundary.ViewBasket.PresentableBasket
 
 interface ViewBasket : SynchronousUseCase<Unit, PresentableBasket> {
   data class PresentableBasket(val lineItems: List<PresentableLineItem>, val basketValue: String)

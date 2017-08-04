@@ -1,6 +1,6 @@
 package uk.co.craigbass.pratura
 
-import uk.co.craigbass.pratura.boundary.Pratura
+import uk.co.craigbass.pratura.main.Pratura
 import uk.co.craigbass.pratura.gateway.*
 import uk.co.craigbass.pratura.testdouble.*
 import uk.co.craigbass.pratura.usecase.*

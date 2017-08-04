@@ -1,7 +1,7 @@
 package uk.co.craigbass.pratura.usecase
 
-import uk.co.craigbass.pratura.boundary.usecase.ViewBasket
-import uk.co.craigbass.pratura.boundary.usecase.ViewBasket.*
+import uk.co.craigbass.pratura.boundary.ViewBasket
+import uk.co.craigbass.pratura.boundary.ViewBasket.*
 import uk.co.craigbass.pratura.domain.*
 import uk.co.craigbass.pratura.domain.Currency
 import uk.co.craigbass.pratura.math.*

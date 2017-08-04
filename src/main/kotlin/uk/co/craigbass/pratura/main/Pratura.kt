@@ -1,12 +1,12 @@
-package uk.co.craigbass.pratura.boundary
+package uk.co.craigbass.pratura.main
 
 import com.madetech.clean.Application
 import com.madetech.clean.usecase.*
-import uk.co.craigbass.pratura.boundary.usecase.AddItemToBasket
-import uk.co.craigbass.pratura.boundary.usecase.AddProduct
-import uk.co.craigbass.pratura.boundary.usecase.SetStoreCurrency
-import uk.co.craigbass.pratura.boundary.usecase.ViewAllProducts
-import uk.co.craigbass.pratura.boundary.usecase.ViewBasket
+import uk.co.craigbass.pratura.boundary.AddItemToBasket
+import uk.co.craigbass.pratura.boundary.AddProduct
+import uk.co.craigbass.pratura.boundary.SetStoreCurrency
+import uk.co.craigbass.pratura.boundary.ViewAllProducts
+import uk.co.craigbass.pratura.boundary.ViewBasket
 import uk.co.craigbass.pratura.usecase.*
 import uk.co.craigbass.pratura.usecase.CurrencySetter
 import kotlin.reflect.KClass

@@ -3,7 +3,7 @@ package uk.co.craigbass.pratura.unit
 import org.amshove.kluent.shouldBe
 import org.jetbrains.spek.api.Spek
 import org.jetbrains.spek.api.dsl.*
-import uk.co.craigbass.pratura.boundary.usecase.AddItemToBasket.Request
+import uk.co.craigbass.pratura.boundary.AddItemToBasket.Request
 import uk.co.craigbass.pratura.domain.BasketItem
 import uk.co.craigbass.pratura.testdouble.*
 import uk.co.craigbass.pratura.usecase.AddItemToBasket
