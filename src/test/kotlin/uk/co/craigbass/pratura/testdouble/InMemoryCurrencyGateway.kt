@@ -1,9 +1,9 @@
 package uk.co.craigbass.pratura.testdouble
 
 import uk.co.craigbass.pratura.domain.Currency
-import uk.co.craigbass.pratura.usecase.*
+import uk.co.craigbass.pratura.gateway.CurrencyGateway
 
-class InMemoryCurrencyGateway : CurrencySetter, CurrencyRetriever {
+class InMemoryCurrencyGateway : CurrencyGateway {
   lateinit var currency: Currency
 
   override fun set(currency: Currency) {

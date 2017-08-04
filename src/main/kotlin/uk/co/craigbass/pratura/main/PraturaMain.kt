@@ -2,7 +2,7 @@ package uk.co.craigbass.pratura.main
 
 import uk.co.craigbass.pratura.boundary.Pratura
 import uk.co.craigbass.pratura.domain.*
-import uk.co.craigbass.pratura.gateway.BasketItemsGateway
+import uk.co.craigbass.pratura.gateway.*
 import uk.co.craigbass.pratura.http.*
 import uk.co.craigbass.pratura.usecase.*
 
@@ -15,8 +15,7 @@ fun main(args: Array<String>) {
 class StandInPratura : Pratura(),
                        BasketItemsGateway,
                        ProductSaver,
-                       CurrencySetter,
-                       CurrencyRetriever {
+                       CurrencyGateway {
   override val currencyRetriever: CurrencyRetriever
     get() = this
 
@@ -30,8 +29,8 @@ class StandInPratura : Pratura(),
     get() = this
   override val basketItemsRetriever: BasketItemsRetriever
     get() = this
-  class StandInProductRetriever : ProductRetriever {
 
+  class StandInProductRetriever : ProductRetriever {
     override fun all(): List<Product> = listOf()
   }
   override fun set(currency: Currency) = Unit

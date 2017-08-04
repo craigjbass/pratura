@@ -9,7 +9,7 @@ import uk.co.craigbass.pratura.usecase.CurrencySetter
 class InMemoryPratura : Pratura() {
   val basketGateway: BasketItemsGateway = InMemoryBasketItemsGateway()
   val productGateway: ProductGateway = InMemoryProductGateway()
-  val currencyGateway: InMemoryCurrencyGateway = InMemoryCurrencyGateway()
+  val currencyGateway: CurrencyGateway = InMemoryCurrencyGateway()
 
   override val currencySetter: CurrencySetter
     get() = currencyGateway
