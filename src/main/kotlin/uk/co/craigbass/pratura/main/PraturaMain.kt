@@ -1,6 +1,5 @@
 package uk.co.craigbass.pratura.main
 
-import uk.co.craigbass.pratura.boundary.Pratura
 import uk.co.craigbass.pratura.domain.*
 import uk.co.craigbass.pratura.gateway.*
 import uk.co.craigbass.pratura.http.*
