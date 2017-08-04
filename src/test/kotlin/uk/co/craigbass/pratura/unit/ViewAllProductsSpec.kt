@@ -4,15 +4,16 @@ import com.madetech.clean.usecase.execute
 import org.amshove.kluent.shouldEqual
 import org.jetbrains.spek.api.Spek
 import org.jetbrains.spek.api.dsl.*
-import uk.co.craigbass.pratura.domain.Product
-import uk.co.craigbass.pratura.testdouble.StubProductRetriever
+import uk.co.craigbass.pratura.domain.*
+import uk.co.craigbass.pratura.testdouble.*
 import uk.co.craigbass.pratura.usecase.ViewAllProducts
 import java.math.BigDecimal.ONE
 
 class ViewAllProductsSpec : Spek({
   var products: List<Product> = listOf()
+  val currency: Currency = Currency("GBP", "GB", "en")
   val productRetriever = memoized { StubProductRetriever(products) }
-  val useCase = memoized { ViewAllProducts(productRetriever()) }
+  val useCase = memoized { ViewAllProducts(productRetriever(), StubCurrencyRetriever(currency)) }
 
   given("one product is available") {
     beforeEachTest {

@@ -13,6 +13,14 @@ class ProductCatalogueSpec : Spek({
 
   beforeEachTest {
     pratura().executeUseCase(
+      SetStoreCurrency::class,
+      SetStoreCurrency.Request(
+        currency = "GBP",
+        country = "GB",
+        language = "en"
+      )
+    )
+    pratura().executeUseCase(
       AddProduct::class,
       AddProduct.Request("sku:1", "9.99".toDecimal(), "Fancy Box of Chocolates")
     )

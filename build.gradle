@@ -33,6 +33,7 @@ dependencies {
     compile "org.jetbrains.ktor:ktor-core:$ktorVersion"
     compile "org.jetbrains.ktor:ktor-netty:$ktorVersion"
     compile 'com.github.salomonbrys.kotson:kotson:2.5.0'
+    compile 'org.joda:joda-money:0.12'
 
     testCompile 'org.amshove.kluent:kluent:1.26'
     testCompile 'org.jetbrains.spek:spek-api:1.1.2'
