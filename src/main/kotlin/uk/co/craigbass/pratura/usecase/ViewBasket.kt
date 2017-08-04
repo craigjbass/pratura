@@ -14,7 +14,7 @@ class ViewBasket(private val basketItemsGateway: BasketItemsRetriever,
   lateinit var currency: Currency
 
   override fun execute(request: Unit): PresentableBasket {
-    currency = currencyRetriever.getCurrencyCurrency()
+    currency = currencyRetriever.getCurrentCurrency()
     val pricedLineItems = pricedLineItems()
     return PresentableBasket(
       lineItems = pricedLineItems.map(this::toPresentableLineItem),

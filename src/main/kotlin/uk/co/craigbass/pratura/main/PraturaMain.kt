@@ -36,7 +36,7 @@ class StandInPratura : Pratura(),
   }
   override fun set(currency: Currency) = Unit
 
-  override fun getCurrencyCurrency(): Currency {
+  override fun getCurrentCurrency(): Currency {
     return Currency("GBP", "GB", "")
   }
   override fun all(): List<BasketItem> = listOf()

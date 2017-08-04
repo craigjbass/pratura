@@ -9,7 +9,7 @@ class InMemoryCurrencyGateway : CurrencySetter, CurrencyRetriever {
   override fun set(currency: Currency) {
    this.currency = currency
   }
-  override fun getCurrencyCurrency(): Currency {
+  override fun getCurrentCurrency(): Currency {
     return currency
   }
 }

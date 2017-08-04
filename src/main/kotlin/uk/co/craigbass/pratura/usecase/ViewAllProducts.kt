@@ -3,14 +3,13 @@ package uk.co.craigbass.pratura.usecase
 import uk.co.craigbass.pratura.boundary.ViewAllProducts
 import uk.co.craigbass.pratura.boundary.ViewAllProducts.PresentableProduct
 import uk.co.craigbass.pratura.domain.*
-import uk.co.craigbass.pratura.math.toCurrencyWithSymbol
 
 class ViewAllProducts(private val productRetriever: ProductRetriever,
                       private val currencyRetriever: CurrencyRetriever) : ViewAllProducts {
   lateinit private var currency: Currency
 
   override fun execute(request: Unit): List<PresentableProduct> {
-    currency = currencyRetriever.getCurrencyCurrency()
+    currency = currencyRetriever.getCurrentCurrency()
     return getAllProducts().map(this::toPresentableProduct)
   }
 
