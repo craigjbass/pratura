@@ -12,7 +12,16 @@ fun main(args: Array<String>) {
   webServer.start()
 }
 
-class StandInPratura : Pratura(), BasketItemsGateway, ProductSaver {
+class StandInPratura : Pratura(),
+                       BasketItemsGateway,
+                       ProductSaver,
+                       CurrencySetter,
+                       CurrencyRetriever {
+  override val currencyRetriever: CurrencyRetriever
+    get() = this
+
+  override val currencySetter: CurrencySetter
+    get() = this
   override val productRetriever: ProductRetriever
     get() = StandInProductRetriever()
   override val productSaver: ProductSaver
@@ -21,11 +30,15 @@ class StandInPratura : Pratura(), BasketItemsGateway, ProductSaver {
     get() = this
   override val basketItemsRetriever: BasketItemsRetriever
     get() = this
-
   class StandInProductRetriever : ProductRetriever {
+
     override fun all(): List<Product> = listOf()
   }
+  override fun set(currency: Currency) = Unit
 
+  override fun getCurrencyCurrency(): Currency {
+    return Currency("GBP", "GB", "")
+  }
   override fun all(): List<BasketItem> = listOf()
   override fun save(product: Product) = Unit
   override fun save(item: BasketItem) = Unit

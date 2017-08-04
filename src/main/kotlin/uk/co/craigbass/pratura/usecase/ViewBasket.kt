@@ -3,13 +3,18 @@ package uk.co.craigbass.pratura.usecase
 import uk.co.craigbass.pratura.boundary.ViewBasket
 import uk.co.craigbass.pratura.boundary.ViewBasket.*
 import uk.co.craigbass.pratura.domain.*
+import uk.co.craigbass.pratura.domain.Currency
 import uk.co.craigbass.pratura.math.*
 import java.math.BigDecimal
 import java.math.BigDecimal.ZERO
 
 class ViewBasket(private val basketItemsGateway: BasketItemsRetriever,
-                 private val productRetriever: ProductRetriever) : ViewBasket {
+                 private val productRetriever: ProductRetriever,
+                 private val currencyRetriever: CurrencyRetriever) : ViewBasket {
+  lateinit var currency: Currency
+
   override fun execute(request: Unit): PresentableBasket {
+    currency = currencyRetriever.getCurrencyCurrency()
     val pricedLineItems = pricedLineItems()
     return PresentableBasket(
       lineItems = pricedLineItems.map(this::toPresentableLineItem),
@@ -22,16 +27,16 @@ class ViewBasket(private val basketItemsGateway: BasketItemsRetriever,
       quantity = pricedLineItem.quantity,
       sku = pricedLineItem.sku,
       name = pricedLineItem.name,
-      unitPrice = pricedLineItem.presentableUnitPrice,
-      total = pricedLineItem.presentableTotal
+      unitPrice = currency.format(pricedLineItem.unitPrice),
+      total = currency.format(pricedLineItem.total)
     )
   }
 
   private fun getBasketTotal(pricedLineItems: List<PricedLineItem>): String {
-    return pricedLineItems
+    val basketSum = pricedLineItems
       .map(PricedLineItem::total)
       .getSumOfTotals()
-      .toCurrencyWithSymbol()
+    return currency.format(basketSum)
   }
 
   private fun pricedLineItems(): List<PricedLineItem> {
@@ -52,8 +57,5 @@ class ViewBasket(private val basketItemsGateway: BasketItemsRetriever,
     val sku = item.sku
     val unitPrice = product.price
     val total = unitPrice * quantity.toDecimal()
-
-    val presentableUnitPrice = unitPrice.toCurrencyWithSymbol()
-    val presentableTotal = total.toCurrencyWithSymbol()
   }
 }
