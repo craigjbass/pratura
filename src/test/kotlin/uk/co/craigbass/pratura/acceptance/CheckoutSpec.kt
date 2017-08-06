@@ -4,12 +4,21 @@ import com.madetech.clean.boundary.executeUseCase
 import org.amshove.kluent.*
 import org.jetbrains.spek.api.Spek
 import org.jetbrains.spek.api.dsl.*
-import uk.co.craigbass.pratura.InMemoryPratura
-import uk.co.craigbass.pratura.boundary.*
+import uk.co.craigbass.pratura.acceptance.testdouble.InMemoryPratura
+import uk.co.craigbass.pratura.boundary.administration.AddProduct
+import uk.co.craigbass.pratura.boundary.basket.AddItemToBasket
+import uk.co.craigbass.pratura.boundary.checkout.*
 import uk.co.craigbass.pratura.math.toDecimal
 
 class CheckoutSpec : Spek({
   val pratura = memoized { InMemoryPratura() }
+  val draftOrderStatus = memoized { pratura().executeUseCase(ViewDraftOrderStatus::class) }
+
+  xgiven("nothing is in the basket") {
+    it("should not be ready") {
+      draftOrderStatus().isReady.shouldBeFalse()
+    }
+  }
 
   xgiven("a product is in the catalogue and the basket") {
     beforeEachTest {
@@ -23,11 +32,10 @@ class CheckoutSpec : Spek({
         AddItemToBasket.Request(quantity = 1, sku = "abcdefg")
       )
     }
-    val draftOrderStatus = memoized { pratura().executeUseCase(ViewDraftOrderStatus::class) }
 
     context("when there is no shipping address") {
       it("should not be ready") {
-        draftOrderStatus().orderCanBePlaced.shouldBeFalse()
+        draftOrderStatus().isReady.shouldBeFalse()
       }
     }
 
@@ -48,7 +56,7 @@ class CheckoutSpec : Spek({
         )
       }
       it("should be ready") {
-        draftOrderStatus().orderCanBePlaced.shouldBeTrue()
+        draftOrderStatus().isReady.shouldBeTrue()
       }
     }
   }
