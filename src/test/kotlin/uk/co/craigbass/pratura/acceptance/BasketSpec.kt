@@ -3,8 +3,9 @@ package uk.co.craigbass.pratura.acceptance
 import org.amshove.kluent.*
 import org.jetbrains.spek.api.Spek
 import org.jetbrains.spek.api.dsl.*
-import uk.co.craigbass.pratura.InMemoryPratura
-import uk.co.craigbass.pratura.boundary.*
+import uk.co.craigbass.pratura.acceptance.testdouble.InMemoryPratura
+import uk.co.craigbass.pratura.boundary.administration.*
+import uk.co.craigbass.pratura.boundary.basket.*
 import uk.co.craigbass.pratura.math.toDecimal
 
 class BasketSpec : Spek({

@@ -4,6 +4,9 @@ import uk.co.craigbass.pratura.domain.*
 import uk.co.craigbass.pratura.gateway.*
 import uk.co.craigbass.pratura.http.*
 import uk.co.craigbass.pratura.usecase.*
+import uk.co.craigbass.pratura.usecase.administration.*
+import uk.co.craigbass.pratura.usecase.basket.BasketItemSaver
+import uk.co.craigbass.pratura.usecase.checkout.ShippingAddressRetriever
 
 fun main(args: Array<String>) {
   val webServer = WebServer()
@@ -14,10 +17,13 @@ fun main(args: Array<String>) {
 class StandInPratura : Pratura(),
                        BasketItemsGateway,
                        ProductSaver,
-                       CurrencyGateway {
-  override val currencyRetriever: CurrencyRetriever
+                       CurrencyGateway,
+                       ShippingAddressRetriever {
+  override val shippingAddressRetriever: ShippingAddressRetriever
     get() = this
 
+  override val currencyRetriever: CurrencyRetriever
+    get() = this
   override val currencySetter: CurrencySetter
     get() = this
   override val productRetriever: ProductRetriever
@@ -28,8 +34,8 @@ class StandInPratura : Pratura(),
     get() = this
   override val basketItemsRetriever: BasketItemsRetriever
     get() = this
-
   class StandInProductRetriever : ProductRetriever {
+
     override fun all(): List<Product> = listOf()
   }
   override fun set(currency: Currency) = Unit
@@ -37,7 +43,10 @@ class StandInPratura : Pratura(),
   override fun getCurrentCurrency(): Currency {
     return Currency("GBP", "GB", "")
   }
-  override fun all(): List<BasketItem> = listOf()
+
+  override fun getAll(): List<BasketItem> = listOf()
+
+  override fun getShippingAddress(): ShippingAddress? = null
   override fun save(product: Product) = Unit
   override fun save(item: BasketItem) = Unit
 }
