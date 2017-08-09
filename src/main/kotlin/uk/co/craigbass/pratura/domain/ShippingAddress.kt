@@ -1,3 +1,4 @@
 package uk.co.craigbass.pratura.domain
 
-class ShippingAddress
+class ShippingAddress(val name: Any) {
+}

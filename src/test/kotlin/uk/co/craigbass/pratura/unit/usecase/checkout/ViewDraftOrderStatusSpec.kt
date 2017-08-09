@@ -41,7 +41,7 @@ class ViewDraftOrderStatusSpec : Spek({
     }
 
     given("there is a shipping address set") {
-      beforeEachTest { shippingAddress = ShippingAddress() }
+      beforeEachTest { shippingAddress = ShippingAddress(name = "") }
 
       it("should be ready") {
         viewDraftOrderStatusUseCase().execute().isReady.shouldBeTrue()

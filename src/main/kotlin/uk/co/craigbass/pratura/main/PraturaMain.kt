@@ -6,7 +6,7 @@ import uk.co.craigbass.pratura.http.*
 import uk.co.craigbass.pratura.usecase.*
 import uk.co.craigbass.pratura.usecase.administration.*
 import uk.co.craigbass.pratura.usecase.basket.BasketItemSaver
-import uk.co.craigbass.pratura.usecase.checkout.ShippingAddressRetriever
+import uk.co.craigbass.pratura.usecase.checkout.*
 
 fun main(args: Array<String>) {
   val webServer = WebServer()
@@ -18,10 +18,13 @@ class StandInPratura : Pratura(),
                        BasketItemsGateway,
                        ProductSaver,
                        CurrencyGateway,
-                       ShippingAddressRetriever {
+                       ShippingAddressRetriever,
+                       ShippingAddressSaver {
   override val shippingAddressRetriever: ShippingAddressRetriever
     get() = this
 
+  override val shippingAddressSaver: ShippingAddressSaver
+    get() = this
   override val currencyRetriever: CurrencyRetriever
     get() = this
   override val currencySetter: CurrencySetter
@@ -47,6 +50,8 @@ class StandInPratura : Pratura(),
   override fun getAll(): List<BasketItem> = listOf()
 
   override fun getShippingAddress(): ShippingAddress? = null
+
   override fun save(product: Product) = Unit
   override fun save(item: BasketItem) = Unit
+  override fun save(shippingAddress: ShippingAddress) = Unit
 }
