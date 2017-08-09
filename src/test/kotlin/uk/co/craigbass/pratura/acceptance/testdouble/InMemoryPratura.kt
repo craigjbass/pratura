@@ -1,17 +1,18 @@
 package uk.co.craigbass.pratura.acceptance.testdouble
 
-import uk.co.craigbass.pratura.gateway.*
 import uk.co.craigbass.pratura.main.Pratura
 import uk.co.craigbass.pratura.usecase.*
 import uk.co.craigbass.pratura.usecase.administration.*
-import uk.co.craigbass.pratura.usecase.checkout.ShippingAddressRetriever
+import uk.co.craigbass.pratura.usecase.checkout.*
 
 class InMemoryPratura : Pratura() {
   val basketGateway = InMemoryBasketItemsGateway()
   val productGateway = InMemoryProductGateway()
   val currencyGateway = InMemoryCurrencyGateway()
-  val shippingAddressGateway = InMemoryShippingAddressRetriever()
+  val shippingAddressGateway = InMemoryShippingAddressGateway()
 
+  override val shippingAddressSaver: ShippingAddressSaver
+    get() = shippingAddressGateway
   override val shippingAddressRetriever: ShippingAddressRetriever
     get() = shippingAddressGateway
 

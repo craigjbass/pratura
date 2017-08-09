@@ -14,17 +14,21 @@ class CheckoutSpec : Spek({
   val pratura = memoized { InMemoryPratura() }
   val draftOrderStatus = memoized { pratura().executeUseCase(ViewDraftOrderStatus::class) }
 
-  xgiven("nothing is in the basket") {
+  given("nothing is in the basket") {
     it("should not be ready") {
       draftOrderStatus().isReady.shouldBeFalse()
     }
   }
 
-  xgiven("a product is in the catalogue and the basket") {
+  given("a product is in the catalogue and the basket") {
     beforeEachTest {
       pratura().executeUseCase(
         AddProduct::class,
-        AddProduct.Request(sku = "abcdefg", price = "2.99".toDecimal(), name = "Anti-Bacterial Spray")
+        AddProduct.Request(
+          sku = "abcdefg",
+          price = "2.99".toDecimal(),
+          name = "Anti-Bacterial Spray"
+        )
       )
 
       pratura().executeUseCase(
@@ -55,6 +59,7 @@ class CheckoutSpec : Spek({
           )
         )
       }
+
       it("should be ready") {
         draftOrderStatus().isReady.shouldBeTrue()
       }
