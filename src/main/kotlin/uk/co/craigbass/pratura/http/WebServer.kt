@@ -1,6 +1,5 @@
 package uk.co.craigbass.pratura.http
 
-import org.jetbrains.ktor.application.call
 import org.jetbrains.ktor.host.*
 import org.jetbrains.ktor.netty.Netty
 import org.jetbrains.ktor.response.respondText
@@ -13,8 +12,13 @@ class WebServer {
     routing {
       controllers.forEach { controller ->
         post(controller.path) {
-          val requestBody = call.request.receive(String::class)
-          call.respondText(controller.execute(requestBody))
+            call.request
+              .receiveContent()
+              .inputStream()
+              .bufferedReader()
+              .use {
+              call.respondText(controller.execute(it.readText()))
+            }
         }
       }
     }

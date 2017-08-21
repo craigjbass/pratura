@@ -4,15 +4,13 @@ import com.madetech.clean.Application
 import com.madetech.clean.usecase.*
 import uk.co.craigbass.pratura.boundary.administration.AddProduct
 import uk.co.craigbass.pratura.boundary.administration.SetStoreCurrency
-import uk.co.craigbass.pratura.boundary.basket.AddItemToBasket
-import uk.co.craigbass.pratura.boundary.basket.ViewBasket
+import uk.co.craigbass.pratura.boundary.basket.*
 import uk.co.craigbass.pratura.boundary.catalogue.ViewAllProducts
-import uk.co.craigbass.pratura.boundary.checkout.*
 import uk.co.craigbass.pratura.boundary.checkout.AddShippingAddress
 import uk.co.craigbass.pratura.boundary.checkout.ViewDraftOrderStatus
 import uk.co.craigbass.pratura.usecase.*
 import uk.co.craigbass.pratura.usecase.administration.*
-import uk.co.craigbass.pratura.usecase.basket.*
+import uk.co.craigbass.pratura.usecase.basket.BasketItemSaver
 import uk.co.craigbass.pratura.usecase.checkout.*
 import kotlin.reflect.KClass
 
