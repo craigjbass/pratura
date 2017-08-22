@@ -12,11 +12,11 @@ import uk.co.craigbass.pratura.math.toDecimal
 
 class CheckoutSpec : Spek({
   val pratura = memoized { InMemoryPratura() }
-  val draftOrderStatus = memoized { pratura().executeUseCase(ViewDraftOrderStatus::class) }
+  val draftOrder = memoized { pratura().executeUseCase(ViewDraftOrder::class) }
 
   given("nothing is in the basket") {
     it("should not be ready") {
-      draftOrderStatus().isReady.shouldBeFalse()
+      draftOrder().`isReadyToComplete?`.shouldBeFalse()
     }
   }
 
@@ -39,7 +39,11 @@ class CheckoutSpec : Spek({
 
     context("when there is no shipping address") {
       it("should not be ready") {
-        draftOrderStatus().isReady.shouldBeFalse()
+        draftOrder().`isReadyToComplete?`.shouldBeFalse()
+      }
+
+      it("should have no shipping address") {
+        draftOrder().shippingAddress.shouldBeNull()
       }
     }
 
@@ -61,7 +65,12 @@ class CheckoutSpec : Spek({
       }
 
       it("should be ready") {
-        draftOrderStatus().isReady.shouldBeTrue()
+        draftOrder().`isReadyToComplete?`.shouldBeTrue()
+      }
+
+      it("should have a shipping address") {
+        draftOrder().shippingAddress!!.name.shouldEqual("Craig J. Bass")
+        draftOrder().shippingAddress!!.companyName.shouldEqual("Pratura Inc.")
       }
     }
   }

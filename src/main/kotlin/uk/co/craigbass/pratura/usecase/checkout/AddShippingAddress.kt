@@ -6,6 +6,11 @@ import uk.co.craigbass.pratura.domain.ShippingAddress
 
 class AddShippingAddress(private val shippingAddressSaver: ShippingAddressSaver) : AddShippingAddress {
   override fun execute(request: Request) {
-    shippingAddressSaver.save(ShippingAddress(name = request.name))
+    shippingAddressSaver.save(
+      ShippingAddress(
+        name = request.name,
+        companyName = request.companyName
+      )
+    )
   }
 }
