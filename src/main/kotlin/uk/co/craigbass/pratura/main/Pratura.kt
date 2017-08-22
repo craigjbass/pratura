@@ -7,7 +7,7 @@ import uk.co.craigbass.pratura.boundary.administration.SetStoreCurrency
 import uk.co.craigbass.pratura.boundary.basket.*
 import uk.co.craigbass.pratura.boundary.catalogue.ViewAllProducts
 import uk.co.craigbass.pratura.boundary.checkout.AddShippingAddress
-import uk.co.craigbass.pratura.boundary.checkout.ViewDraftOrderStatus
+import uk.co.craigbass.pratura.boundary.checkout.ViewDraftOrder
 import uk.co.craigbass.pratura.usecase.*
 import uk.co.craigbass.pratura.usecase.administration.*
 import uk.co.craigbass.pratura.usecase.basket.BasketItemSaver
@@ -45,7 +45,7 @@ abstract class Pratura : Application() {
       AddShippingAddress::class -> uk.co.craigbass.pratura.usecase.checkout.AddShippingAddress(
         shippingAddressSaver
       )
-      ViewDraftOrderStatus::class -> uk.co.craigbass.pratura.usecase.checkout.ViewDraftOrderStatus(
+      ViewDraftOrder::class -> uk.co.craigbass.pratura.usecase.checkout.ViewDraftOrder(
         basketItemsRetriever,
         shippingAddressRetriever
       )

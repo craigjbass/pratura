@@ -22,7 +22,7 @@ class AddShippingAddressSpec : Spek({
     beforeEachTest {
       AddShippingAddress(shippingAddressSaver()).execute(Request(
         name = "Craig J. Bass",
-        companyName = null,
+        companyName = "123 Limited.",
         addressLine1 = "",
         addressLine2 = null,
         addressLine3 = null,
@@ -34,6 +34,7 @@ class AddShippingAddressSpec : Spek({
 
     it("should save the shipping address") {
       shippingAddressSaver().lastSavedAddress.name.shouldEqual("Craig J. Bass")
+      shippingAddressSaver().lastSavedAddress.companyName.shouldEqual("123 Limited.")
     }
   }
 })
