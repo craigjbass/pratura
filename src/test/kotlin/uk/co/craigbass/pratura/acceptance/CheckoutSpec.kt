@@ -64,13 +64,21 @@ class CheckoutSpec : Spek({
         )
       }
 
+      val presentableShippingAddress = memoized { draftOrder().shippingAddress!! }
+
       it("should be ready") {
         draftOrder().`isReadyToComplete?`.shouldBeTrue()
       }
 
       it("should have a shipping address") {
-        draftOrder().shippingAddress!!.name.shouldEqual("Craig J. Bass")
-        draftOrder().shippingAddress!!.companyName.shouldEqual("Pratura Inc.")
+        presentableShippingAddress().name.shouldEqual("Craig J. Bass")
+        presentableShippingAddress().companyName.shouldEqual("Pratura Inc.")
+        presentableShippingAddress().addressLine1.shouldEqual("1 Pratura Way")
+        presentableShippingAddress().addressLine2.shouldEqual("")
+        presentableShippingAddress().addressLine3.shouldEqual("")
+        presentableShippingAddress().city.shouldEqual("Vertiform City")
+        presentableShippingAddress().province.shouldEqual("Sector 001")
+        presentableShippingAddress().zipcode.shouldEqual("123456")
       }
     }
   }

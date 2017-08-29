@@ -21,10 +21,16 @@ class ViewDraftOrder(private val basketItemsRetriever: BasketItemsRetriever,
 
   private fun `shippingAddress?`() = shippingAddress != null
 
-  private fun ShippingAddress?.toPresentableAddress() = this?.let { address ->
+  private fun ShippingAddress?.toPresentableAddress() = this?.let {
     ViewDraftOrder.PresentableAddress(
-      name = address.name,
-      companyName = address.companyName
+      name = name,
+      companyName = companyName,
+      addressLine1 = addressLine1,
+      addressLine2 = addressLine2 ?: "",
+      addressLine3 = addressLine3 ?: "",
+      city = city,
+      province = province,
+      zipcode = zipcode
     )
   }
 }

@@ -9,7 +9,13 @@ class AddShippingAddress(private val shippingAddressSaver: ShippingAddressSaver)
     shippingAddressSaver.save(
       ShippingAddress(
         name = request.name,
-        companyName = request.companyName
+        companyName = request.companyName,
+        addressLine1 = request.addressLine1,
+        addressLine2 = request.addressLine2,
+        addressLine3 = request.addressLine3,
+        city = request.city,
+        province = request.province,
+        zipcode = request.zipcode
       )
     )
   }
