@@ -11,7 +11,7 @@ class AddToBasketController(private val useCaseExecutor: SynchronousUseCaseExecu
   override fun execute(requestBody: String): String {
     useCaseExecutor.executeUseCase(
       AddItemToBasket::class,
-      Gson().fromJson<AddItemToBasket.Request>(requestBody)
+      Gson().fromJson(requestBody)
     )
     return "{}"
   }

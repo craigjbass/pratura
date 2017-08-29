@@ -17,24 +17,55 @@ class AddShippingAddressSpec : Spek({
   }
 
   val shippingAddressSaver = memoized { SpyShippingAddressSaver() }
+  val savedAddress = memoized { shippingAddressSaver().lastSavedAddress }
 
-  given("a shipping address is added") {
-    beforeEachTest {
-      AddShippingAddress(shippingAddressSaver()).execute(Request(
-        name = "Craig J. Bass",
-        companyName = "123 Limited.",
-        addressLine1 = "",
-        addressLine2 = null,
-        addressLine3 = null,
-        city = "",
-        province = "",
-        zipcode = ""
-      ))
-    }
+  listOf(mapOf(
+    "name" to "Craig J. Bass",
+    "companyName" to "123 Limited.",
+    "addressLine1" to "Mango Grove Way",
+    "addressLine2" to null,
+    "addressLine3" to null,
+    "city" to "",
+    "province" to "",
+    "zipcode" to ""
+  ), mapOf(
+    "name" to "John Turner",
+    "companyName" to "Lexico Inc.",
+    "addressLine1" to "Lexway",
+    "addressLine2" to null,
+    "addressLine3" to null,
+    "city" to "",
+    "province" to "",
+    "zipcode" to ""
+  )
+  ).forEach {
+    given("a shipping address is added ($it)") {
+      beforeEachTest {
+        AddShippingAddress(shippingAddressSaver())
+          .execute(
+            Request(
+              name = it["name"]!!,
+              companyName = it["companyName"]!!,
+              addressLine1 = it["addressLine1"]!!,
+              addressLine2 = it["addressLine2"],
+              addressLine3 = it["addressLine3"],
+              city = it["city"]!!,
+              province = it["province"]!!,
+              zipcode = it["zipcode"]!!
+            )
+          )
+      }
 
-    it("should save the shipping address") {
-      shippingAddressSaver().lastSavedAddress.name.shouldEqual("Craig J. Bass")
-      shippingAddressSaver().lastSavedAddress.companyName.shouldEqual("123 Limited.")
+      it("should save the shipping address") {
+        savedAddress().name.shouldEqual(it["name"])
+        savedAddress().companyName.shouldEqual(it["companyName"])
+        savedAddress().addressLine1.shouldEqual(it["addressLine1"])
+        savedAddress().addressLine2.shouldEqual(it["addressLine2"])
+        savedAddress().addressLine3.shouldEqual(it["addressLine3"])
+        savedAddress().city.shouldEqual(it["city"])
+        savedAddress().province.shouldEqual(it["province"])
+        savedAddress().zipcode.shouldEqual(it["zipcode"])
+      }
     }
   }
 })
