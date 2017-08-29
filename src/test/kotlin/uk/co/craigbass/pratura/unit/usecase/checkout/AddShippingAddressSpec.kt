@@ -37,34 +37,42 @@ class AddShippingAddressSpec : Spek({
     "city" to "",
     "province" to "",
     "zipcode" to ""
-  )
-  ).forEach {
-    given("a shipping address is added ($it)") {
+  ), mapOf(
+    "name" to null,
+    "companyName" to null,
+    "addressLine1" to null,
+    "addressLine2" to null,
+    "addressLine3" to null,
+    "city" to null,
+    "province" to null,
+    "zipcode" to null
+  )).forEach { addressExample ->
+    given("a shipping address is added ($addressExample)") {
       beforeEachTest {
         AddShippingAddress(shippingAddressSaver())
           .execute(
             Request(
-              name = it["name"]!!,
-              companyName = it["companyName"]!!,
-              addressLine1 = it["addressLine1"]!!,
-              addressLine2 = it["addressLine2"],
-              addressLine3 = it["addressLine3"],
-              city = it["city"]!!,
-              province = it["province"]!!,
-              zipcode = it["zipcode"]!!
+              name = addressExample["name"],
+              companyName = addressExample["companyName"],
+              addressLine1 = addressExample["addressLine1"],
+              addressLine2 = addressExample["addressLine2"],
+              addressLine3 = addressExample["addressLine3"],
+              city = addressExample["city"],
+              province = addressExample["province"],
+              zipcode = addressExample["zipcode"]
             )
           )
       }
 
       it("should save the shipping address") {
-        savedAddress().name.shouldEqual(it["name"])
-        savedAddress().companyName.shouldEqual(it["companyName"])
-        savedAddress().addressLine1.shouldEqual(it["addressLine1"])
-        savedAddress().addressLine2.shouldEqual(it["addressLine2"])
-        savedAddress().addressLine3.shouldEqual(it["addressLine3"])
-        savedAddress().city.shouldEqual(it["city"])
-        savedAddress().province.shouldEqual(it["province"])
-        savedAddress().zipcode.shouldEqual(it["zipcode"])
+        savedAddress().name.shouldEqual(addressExample["name"] ?: "")
+        savedAddress().companyName.shouldEqual(addressExample["companyName"])
+        savedAddress().addressLine1.shouldEqual(addressExample["addressLine1"] ?: "")
+        savedAddress().addressLine2.shouldEqual(addressExample["addressLine2"])
+        savedAddress().addressLine3.shouldEqual(addressExample["addressLine3"])
+        savedAddress().city.shouldEqual(addressExample["city"] ?: "")
+        savedAddress().province.shouldEqual(addressExample["province"] ?: "")
+        savedAddress().zipcode.shouldEqual(addressExample["zipcode"] ?: "")
       }
     }
   }

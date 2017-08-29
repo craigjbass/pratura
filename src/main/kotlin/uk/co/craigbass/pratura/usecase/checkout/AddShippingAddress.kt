@@ -8,14 +8,14 @@ class AddShippingAddress(private val shippingAddressSaver: ShippingAddressSaver)
   override fun execute(request: Request) {
     shippingAddressSaver.save(
       ShippingAddress(
-        name = request.name,
+        name = request.name ?: "",
         companyName = request.companyName,
-        addressLine1 = request.addressLine1,
+        addressLine1 = request.addressLine1 ?: "",
         addressLine2 = request.addressLine2,
         addressLine3 = request.addressLine3,
-        city = request.city,
-        province = request.province,
-        zipcode = request.zipcode
+        city = request.city ?: "",
+        province = request.province ?: "",
+        zipcode = request.zipcode ?: ""
       )
     )
   }
