@@ -1,5 +1,6 @@
 package uk.co.craigbass.pratura.acceptance
 
+import com.madetech.clean.boundary.executeUseCase
 import org.amshove.kluent.*
 import org.jetbrains.spek.api.Spek
 import org.jetbrains.spek.api.dsl.*
@@ -10,7 +11,13 @@ import uk.co.craigbass.pratura.math.toDecimal
 
 class BasketSpec : Spek({
   val pratura = memoized { InMemoryPratura() }
-  val basketContents = memoized { pratura().executeUseCase(ViewBasket::class, Unit) }
+  val basketId = memoized { pratura().executeUseCase(CreateBasket::class).basketId }
+  val basketContents = memoized {
+    pratura().executeUseCase(
+      ViewBasket::class,
+      ViewBasket.Request(basketId())
+    )
+  }
 
   beforeEachTest {
     pratura().executeUseCase(
@@ -40,6 +47,7 @@ class BasketSpec : Spek({
         pratura().executeUseCase(
           AddItemToBasket::class,
           AddItemToBasket.Request(
+            basketId = basketId(),
             quantity = 1,
             sku = "productsku"
           )
@@ -81,6 +89,7 @@ class BasketSpec : Spek({
         pratura().executeUseCase(
           AddItemToBasket::class,
           AddItemToBasket.Request(
+            basketId = basketId(),
             quantity = 1,
             sku = "productsku"
           )
@@ -116,11 +125,23 @@ class BasketSpec : Spek({
         lineItems().first().total.shouldEqual("£5.00")
       }
 
+      given("we view a new empty basket") {
+        it("should have no items") {
+          val basket = pratura().executeUseCase(CreateBasket::class)
+          val presentableBasket = pratura().executeUseCase(
+            ViewBasket::class,
+            ViewBasket.Request(basket.basketId)
+          )
+          presentableBasket.lineItems.count().shouldBe(0)
+        }
+      }
+
       given("the same item is added again") {
         beforeEachTest {
           pratura().executeUseCase(
             AddItemToBasket::class,
             AddItemToBasket.Request(
+              basketId = basketId(),
               quantity = 1,
               sku = "productsku"
             )
@@ -162,6 +183,7 @@ class BasketSpec : Spek({
           pratura().executeUseCase(
             AddItemToBasket::class,
             AddItemToBasket.Request(
+              basketId = basketId(),
               quantity = 1,
               sku = "sku:1"
             )

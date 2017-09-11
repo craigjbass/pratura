@@ -10,13 +10,13 @@ import uk.co.craigbass.pratura.boundary.checkout.AddShippingAddress
 import uk.co.craigbass.pratura.boundary.checkout.ViewDraftOrder
 import uk.co.craigbass.pratura.usecase.*
 import uk.co.craigbass.pratura.usecase.administration.*
-import uk.co.craigbass.pratura.usecase.basket.BasketItemSaver
+import uk.co.craigbass.pratura.usecase.basket.BasketWriter
 import uk.co.craigbass.pratura.usecase.checkout.*
 import kotlin.reflect.KClass
 
 abstract class Pratura : Application() {
-  abstract val basketItemSaver: BasketItemSaver
-  abstract val basketItemsRetriever: BasketItemsRetriever
+  abstract val basketWriter: BasketWriter
+  abstract val basketReader: BasketReader
   abstract val productSaver: ProductSaver
   abstract val productRetriever: ProductRetriever
   abstract val currencySetter: CurrencySetter
@@ -29,14 +29,15 @@ abstract class Pratura : Application() {
   override fun unsafeConstructSynchronous(useCase: KClass<*>): SynchronousUseCase<*, *>? {
     return when (useCase) {
       AddItemToBasket::class -> uk.co.craigbass.pratura.usecase.basket.AddItemToBasket(
-        basketItemSaver,
-        basketItemsRetriever
+        basketWriter,
+        basketReader
       )
       ViewBasket::class -> uk.co.craigbass.pratura.usecase.basket.ViewBasket(
-        basketItemsRetriever,
+        basketReader,
         productRetriever,
         currencyRetriever
       )
+      CreateBasket::class -> uk.co.craigbass.pratura.usecase.basket.CreateBasket(basketWriter)
       AddProduct::class -> uk.co.craigbass.pratura.usecase.administration.AddProduct(productSaver)
       ViewAllProducts::class -> uk.co.craigbass.pratura.usecase.catalogue.ViewAllProducts(
         productRetriever,
@@ -46,7 +47,7 @@ abstract class Pratura : Application() {
         shippingAddressSaver
       )
       ViewDraftOrder::class -> uk.co.craigbass.pratura.usecase.checkout.ViewDraftOrder(
-        basketItemsRetriever,
+        basketReader,
         shippingAddressRetriever
       )
       SetStoreCurrency::class -> uk.co.craigbass.pratura.usecase.administration.SetStoreCurrency(currencySetter)
