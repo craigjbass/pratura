@@ -1,23 +1,34 @@
 package uk.co.craigbass.pratura.usecase.checkout
 
 import uk.co.craigbass.pratura.boundary.checkout.ViewDraftOrder
+import uk.co.craigbass.pratura.boundary.checkout.ViewDraftOrder.*
 import uk.co.craigbass.pratura.domain.ShippingAddress
-import uk.co.craigbass.pratura.usecase.BasketItemsRetriever
+import uk.co.craigbass.pratura.usecase.BasketReader
 
-class ViewDraftOrder(private val basketItemsRetriever: BasketItemsRetriever,
+class ViewDraftOrder(private val basketReader: BasketReader,
                      private val shippingAddressRetriever: ShippingAddressRetriever) : ViewDraftOrder {
   var shippingAddress: ShippingAddress? = null
 
-  override fun execute(request: Unit): ViewDraftOrder.Response {
+  override fun execute(request: Request): ViewDraftOrder.Response {
+    if (basketNotFound(request)) return basketNotFound()
     shippingAddress = shippingAddressRetriever.getShippingAddress()
 
     return ViewDraftOrder.Response(
-      `isReadyToComplete?` = `shippingAddress?`() && hasBasketItems(),
-      shippingAddress = shippingAddress.toPresentableAddress()
+      `readyToComplete?` = `shippingAddress?`() && hasBasketItems(request.basketId),
+      shippingAddress = shippingAddress.toPresentableAddress(),
+      errors = setOf()
     )
   }
 
-  private fun hasBasketItems() = basketItemsRetriever.getAll().count() > 0
+  private fun basketNotFound(request: Request) = !basketReader.`basketExists?`(request.basketId)
+
+  private fun basketNotFound() = Response(
+    `readyToComplete?` = false,
+    shippingAddress = null,
+    errors = setOf("BASKET_NOT_FOUND")
+  )
+
+  private fun hasBasketItems(basketId: String) = basketReader.getAll(basketId).count() > 0
 
   private fun `shippingAddress?`() = shippingAddress != null
 

@@ -25,9 +25,8 @@ class InMemoryPratura : Pratura() {
     get() = productGateway
   override val productSaver: ProductSaver
     get() = productGateway
-
-  override val basketItemSaver
+  override val basketWriter
     get() = basketGateway
-  override val basketItemsRetriever
+  override val basketReader
     get() = basketGateway
 }

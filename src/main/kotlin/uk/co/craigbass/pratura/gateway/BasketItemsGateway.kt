@@ -1,6 +1,6 @@
 package uk.co.craigbass.pratura.gateway
 
-import uk.co.craigbass.pratura.usecase.BasketItemsRetriever
-import uk.co.craigbass.pratura.usecase.basket.*
+import uk.co.craigbass.pratura.usecase.BasketReader
+import uk.co.craigbass.pratura.usecase.basket.BasketWriter
 
-interface BasketItemsGateway : BasketItemSaver, BasketItemsRetriever
+interface BasketItemsGateway : BasketWriter, BasketReader

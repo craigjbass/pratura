@@ -3,19 +3,20 @@ package uk.co.craigbass.pratura.unit.usecase.basket
 import org.amshove.kluent.*
 import org.jetbrains.spek.api.Spek
 import org.jetbrains.spek.api.dsl.*
+import uk.co.craigbass.pratura.boundary.basket.ViewBasket.Request
 import uk.co.craigbass.pratura.domain.*
 import uk.co.craigbass.pratura.math.toDecimal
 import uk.co.craigbass.pratura.unit.testdouble.*
-import uk.co.craigbass.pratura.unit.testdouble.StubBasketItemsRetriever
 import uk.co.craigbass.pratura.usecase.basket.ViewBasket
 import java.math.BigDecimal.ONE
 
 class ViewBasketSpec : Spek({
+  var basketId: String? = null
   var currency: Currency? = null
   var products: List<Product> = listOf()
   var basketItems: List<BasketItem> = listOf()
   val basketItemsRetriever = memoized {
-    StubBasketItemsRetriever(basketItems)
+    StubBasketReader(mapOf(Pair("an-id-that-exists", basketItems)))
   }
   val currencyRetriever = memoized { StubCurrencyRetriever(currency!!) }
   val viewBasket = memoized {
@@ -25,8 +26,32 @@ class ViewBasketSpec : Spek({
       currencyRetriever()
     )
   }
-  val basketContents = memoized { viewBasket().execute(Unit) }
+  val basketContents = memoized {
+    viewBasket().execute(
+      Request(
+        basketId = basketId!!
+      )
+    )
+  }
   val firstLineItem = memoized { basketContents().lineItems.first() }
+
+  beforeEachTest { basketId = "an-id-that-exists" }
+
+  given("a basket that doesn't exist") {
+    beforeEachTest {
+      currency = Currency("EUR", "NL", "nl")
+      basketId = "this-basket-does-not-exist"
+    }
+
+    it("should give a validation error") {
+      basketContents().errors.`should contain`("BASKET_NOT_FOUND")
+    }
+
+    it("should have no items") {
+      basketContents().lineItems.shouldBeEmpty()
+      basketContents().basketValue.`should equal to`("")
+    }
+  }
 
   given("currency is EUR and country is NL") {
     given("one aproductsku is in the basket") {
@@ -34,6 +59,10 @@ class ViewBasketSpec : Spek({
         currency = Currency("EUR", "NL", "nl")
         products = listOf(Product("aproductsku", "1.23".toDecimal(), "Watermelon"))
         basketItems = listOf(BasketItem(1, "aproductsku"))
+      }
+
+      it("should have no errors") {
+        basketContents().errors.shouldBeEmpty()
       }
 
       it("should have the correct unit price") {

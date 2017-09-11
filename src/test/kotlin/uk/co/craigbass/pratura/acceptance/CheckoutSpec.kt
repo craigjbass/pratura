@@ -6,17 +6,26 @@ import org.jetbrains.spek.api.Spek
 import org.jetbrains.spek.api.dsl.*
 import uk.co.craigbass.pratura.acceptance.testdouble.InMemoryPratura
 import uk.co.craigbass.pratura.boundary.administration.AddProduct
-import uk.co.craigbass.pratura.boundary.basket.AddItemToBasket
+import uk.co.craigbass.pratura.boundary.basket.*
 import uk.co.craigbass.pratura.boundary.checkout.*
+import uk.co.craigbass.pratura.boundary.checkout.ViewDraftOrder.Request
 import uk.co.craigbass.pratura.math.toDecimal
 
 class CheckoutSpec : Spek({
   val pratura = memoized { InMemoryPratura() }
-  val draftOrder = memoized { pratura().executeUseCase(ViewDraftOrder::class) }
+  val basketId = memoized { pratura().executeUseCase(CreateBasket::class).basketId }
+  val draftOrder = memoized {
+    pratura().executeUseCase(
+      ViewDraftOrder::class,
+      Request(
+        basketId = basketId()
+      )
+    )
+  }
 
   given("nothing is in the basket") {
     it("should not be ready") {
-      draftOrder().`isReadyToComplete?`.shouldBeFalse()
+      draftOrder().`readyToComplete?`.shouldBeFalse()
     }
   }
 
@@ -33,13 +42,17 @@ class CheckoutSpec : Spek({
 
       pratura().executeUseCase(
         AddItemToBasket::class,
-        AddItemToBasket.Request(quantity = 1, sku = "abcdefg")
+        AddItemToBasket.Request(
+          basketId = basketId(),
+          quantity = 1,
+          sku = "abcdefg"
+        )
       )
     }
 
     context("when there is no shipping address") {
       it("should not be ready") {
-        draftOrder().`isReadyToComplete?`.shouldBeFalse()
+        draftOrder().`readyToComplete?`.shouldBeFalse()
       }
 
       it("should have no shipping address") {
@@ -63,11 +76,10 @@ class CheckoutSpec : Spek({
           )
         )
       }
-
       val presentableShippingAddress = memoized { draftOrder().shippingAddress!! }
 
       it("should be ready") {
-        draftOrder().`isReadyToComplete?`.shouldBeTrue()
+        draftOrder().`readyToComplete?`.shouldBeTrue()
       }
 
       it("should have a shipping address") {

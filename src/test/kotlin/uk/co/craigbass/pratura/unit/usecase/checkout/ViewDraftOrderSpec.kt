@@ -1,52 +1,104 @@
 package uk.co.craigbass.pratura.unit.usecase.checkout
 
-import com.madetech.clean.usecase.execute
 import org.amshove.kluent.*
 import org.jetbrains.spek.api.Spek
 import org.jetbrains.spek.api.dsl.*
+import uk.co.craigbass.pratura.boundary.checkout.ViewDraftOrder.Request
 import uk.co.craigbass.pratura.domain.*
-import uk.co.craigbass.pratura.unit.testdouble.StubBasketItemsRetriever
+import uk.co.craigbass.pratura.unit.testdouble.SpyBasketReader
 import uk.co.craigbass.pratura.usecase.checkout.*
 
 typealias TestCase<A, B> = Pair<A, B>
 
 class ViewDraftOrderSpec : Spek({
-  var basketItems: List<BasketItem>? = null
+  var baskets: Map<String, List<BasketItem>>? = null
   var shippingAddress: ShippingAddress? = null
+  val basketReader = memoized { SpyBasketReader(baskets!!) }
   val viewDraftOrderUseCase = memoized {
     ViewDraftOrder(
-      StubBasketItemsRetriever(basketItems!!),
+      basketReader(),
       object : ShippingAddressRetriever {
         override fun getShippingAddress() = shippingAddress
       }
     )
   }
   val response = memoized {
-    viewDraftOrderUseCase().execute()
+    viewDraftOrderUseCase().execute(
+      Request("an-id-that-exists")
+    )
   }
   val presentableShippingAddress = memoized {
     response().shippingAddress!!
   }
 
+  given("one basket") {
+    beforeEachTest {
+      baskets = mapOf(
+        Pair("this-is-a-valid-id", listOf())
+      )
+    }
+
+    context("when viewing a draft order for a basket that does exist") {
+      beforeEachTest {
+        viewDraftOrderUseCase().execute(
+          Request("this-is-a-valid-id")
+        )
+      }
+
+      it("should have called the basket reader with the correct id") {
+        basketReader().basketIdsSentToBasketExists.shouldContain("this-is-a-valid-id")
+      }
+    }
+
+    context("when viewing draft order for a basket that does not exist") {
+      val notFoundResponse = memoized {
+        viewDraftOrderUseCase().execute(
+          Request("basket that does not exist")
+        )
+      }
+
+      beforeEachTest { notFoundResponse() }
+
+      it("should have called the basket reader with the correct id") {
+        basketReader().basketIdsSentToBasketExists.shouldContain("basket that does not exist")
+      }
+
+      it("should be a basket not found error") {
+        notFoundResponse().errors.shouldContain("BASKET_NOT_FOUND")
+      }
+      it("should not be ready") {
+        notFoundResponse().`readyToComplete?`.shouldBeFalse()
+      }
+    }
+  }
+
   given("there are no items in the basket") {
     beforeEachTest {
-      basketItems = listOf()
+      baskets = mapOf(Pair("an-id-that-exists", listOf()))
       shippingAddress = null
     }
 
     it("should not be ready") {
-      response().`isReadyToComplete?`.shouldBeFalse()
+      response().`readyToComplete?`.shouldBeFalse()
+    }
+
+    it("should have no errors") {
+      response().errors.shouldBeEmpty()
     }
   }
 
   given("there is one item in the basket") {
     beforeEachTest {
       shippingAddress = null
-      basketItems = listOf(BasketItem(quantity = 1, sku = "sku"))
+      baskets = mapOf(Pair("an-id-that-exists", listOf(BasketItem(quantity = 1, sku = "sku"))))
     }
 
     it("should not be ready") {
-      response().`isReadyToComplete?`.shouldBeFalse()
+      response().`readyToComplete?`.shouldBeFalse()
+    }
+
+    it("should have no errors") {
+      response().errors.shouldBeEmpty()
     }
 
     listOf(mapOf(
@@ -86,7 +138,7 @@ class ViewDraftOrderSpec : Spek({
         beforeEachTest { shippingAddress = address }
 
         it("should be ready") {
-          response().`isReadyToComplete?`.shouldBeTrue()
+          response().`readyToComplete?`.shouldBeTrue()
         }
 
         it("should have a shipping address") {
