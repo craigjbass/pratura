@@ -5,7 +5,7 @@ import com.madetech.clean.usecase.*
 import kotlin.reflect.KClass
 
 @Suppress("UNCHECKED_CAST")
-class UseCaseExecutor(val unsafeConstructor: UnsafeConstructor) :
+class UseCaseExecutor(private val unsafeConstructor: UnsafeConstructor) :
   AsynchronousUseCaseExecutor,
   SynchronousUseCaseExecutor {
   override fun <U : SynchronousUseCase<REQ, RES>, REQ, RES> executeUseCase(useCase: KClass<U>, request: REQ): RES

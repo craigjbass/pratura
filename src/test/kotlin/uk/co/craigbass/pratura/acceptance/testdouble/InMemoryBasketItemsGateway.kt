@@ -4,7 +4,7 @@ import uk.co.craigbass.pratura.domain.BasketItem
 import uk.co.craigbass.pratura.gateway.BasketItemsGateway
 
 class InMemoryBasketItemsGateway : BasketItemsGateway {
-  val baskets = mutableMapOf<String, MutableList<BasketItem>>()
+  private val baskets = mutableMapOf<String, MutableList<BasketItem>>()
 
   override fun new(): String {
     val uniqueBasketId = uniqueBasketId()

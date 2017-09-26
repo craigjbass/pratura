@@ -54,11 +54,11 @@ class ViewBasketSpec : Spek({
   }
 
   given("currency is EUR and country is NL") {
-    given("one aproductsku is in the basket") {
+    given("one product is in the basket") {
       beforeEachTest {
         currency = Currency("EUR", "NL", "nl")
-        products = listOf(Product("aproductsku", "1.23".toDecimal(), "Watermelon"))
-        basketItems = listOf(BasketItem(1, "aproductsku"))
+        products = listOf(Product("a product sku", "1.23".toDecimal(), "Watermelon"))
+        basketItems = listOf(BasketItem(1, "a product sku"))
       }
 
       it("should have no errors") {
@@ -107,10 +107,10 @@ class ViewBasketSpec : Spek({
     }
 
 
-    given("one aproductsku is in the basket") {
+    given("one product is in the basket") {
       beforeEachTest {
-        products = listOf(Product("aproductsku", "1.23".toDecimal(), "Watermelon"))
-        basketItems = listOf(BasketItem(1, "aproductsku"))
+        products = listOf(Product("a product sku", "1.23".toDecimal(), "Watermelon"))
+        basketItems = listOf(BasketItem(1, "a product sku"))
       }
 
       it("should contain one line item") {
@@ -126,7 +126,7 @@ class ViewBasketSpec : Spek({
       }
 
       it("should have the correct sku") {
-        firstLineItem().sku.shouldBe("aproductsku")
+        firstLineItem().sku.shouldBe("a product sku")
       }
 
       it("should have the correct name") {

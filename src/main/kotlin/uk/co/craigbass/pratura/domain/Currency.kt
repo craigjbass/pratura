@@ -5,7 +5,7 @@ import org.joda.money.format.MoneyFormatterBuilder
 import java.math.BigDecimal
 import java.util.*
 
-class Currency(val currency: String, val locale: Locale) {
+class Currency(val currency: String, private val locale: Locale) {
   constructor(currency: String, country: String, language: String)
     : this(currency, Locale(language, country))
 

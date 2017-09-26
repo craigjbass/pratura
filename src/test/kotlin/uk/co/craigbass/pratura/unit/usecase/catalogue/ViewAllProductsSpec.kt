@@ -11,7 +11,7 @@ import java.math.BigDecimal.ONE
 
 class ViewAllProductsSpec : Spek({
   var products: List<Product> = listOf()
-  val currency: Currency = Currency("GBP", "GB", "en")
+  val currency = Currency("GBP", "GB", "en")
   val productRetriever = memoized { StubProductRetriever(products) }
   val useCase = memoized {
     ViewAllProducts(productRetriever(),

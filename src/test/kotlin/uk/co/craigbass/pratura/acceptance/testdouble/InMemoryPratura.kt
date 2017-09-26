@@ -6,10 +6,10 @@ import uk.co.craigbass.pratura.usecase.administration.*
 import uk.co.craigbass.pratura.usecase.checkout.*
 
 class InMemoryPratura : Pratura() {
-  val basketGateway = InMemoryBasketItemsGateway()
-  val productGateway = InMemoryProductGateway()
-  val currencyGateway = InMemoryCurrencyGateway()
-  val shippingAddressGateway = InMemoryShippingAddressGateway()
+  private val basketGateway = InMemoryBasketItemsGateway()
+  private val productGateway = InMemoryProductGateway()
+  private val currencyGateway = InMemoryCurrencyGateway()
+  private val shippingAddressGateway = InMemoryShippingAddressGateway()
 
   override val shippingAddressSaver: ShippingAddressSaver
     get() = shippingAddressGateway

@@ -4,7 +4,7 @@ import uk.co.craigbass.pratura.domain.Product
 import uk.co.craigbass.pratura.gateway.ProductGateway
 
 class InMemoryProductGateway : ProductGateway {
-  val products : MutableList<Product> = mutableListOf()
+  private val products : MutableList<Product> = mutableListOf()
 
   override fun all(): List<Product> {
     return products
