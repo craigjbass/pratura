@@ -4,7 +4,7 @@ import uk.co.craigbass.pratura.domain.BasketItem
 import uk.co.craigbass.pratura.usecase.basket.BasketWriter
 
 class SpyBasketItemsWriter : BasketWriter {
-  val baskets = mutableMapOf<String, MutableList<BasketItem>>()
+  private val baskets = mutableMapOf<String, MutableList<BasketItem>>()
 
   override fun new(): String {
     return ""

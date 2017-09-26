@@ -7,7 +7,7 @@ import uk.co.craigbass.pratura.usecase.BasketReader
 
 class ViewDraftOrder(private val basketReader: BasketReader,
                      private val shippingAddressRetriever: ShippingAddressRetriever) : ViewDraftOrder {
-  var shippingAddress: ShippingAddress? = null
+  private var shippingAddress: ShippingAddress? = null
 
   override fun execute(request: Request): ViewDraftOrder.Response {
     if (basketNotFound(request)) return basketNotFound()

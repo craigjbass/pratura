@@ -9,7 +9,7 @@ abstract class Application :
   UnsafeConstructor,
   AsynchronousUseCaseExecutor,
   SynchronousUseCaseExecutor {
-  val useCaseExecutor: UseCaseExecutor
+  private val useCaseExecutor: UseCaseExecutor
     get() = UseCaseExecutor(this)
 
   override fun <U : AsynchronousUseCase<R, P>, R, P> executeUseCase(useCase: KClass<U>, request: R, presenter: P) {
