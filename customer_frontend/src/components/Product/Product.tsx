@@ -1,7 +1,28 @@
 import * as React from 'react'
+import { MouseEvent } from 'react'
+import './Product.css'
 
-export default class Product extends React.Component {
+export interface Props {
+    addToBasket: (sku: String) => void,
+    sku: String,
+    name: String
+}
+
+export default class Product extends React.Component<Props, object> {
     render() {
-        return <span>Hello world!</span>
+        return (
+            <div>
+                <div>
+                    {this.props.name}
+                    <small>({this.props.sku})</small>
+                </div>
+                <a href="#" onClick={this.onAddToBasket}>Add to basket</a>
+            </div>
+        )
+    }
+
+    private onAddToBasket(event: MouseEvent<HTMLAnchorElement>) {
+        event.preventDefault()
+        this.props.addToBasket(this.props.sku)
     }
 }

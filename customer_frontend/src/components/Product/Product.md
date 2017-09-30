@@ -1,5 +1,5 @@
 Product example:
 
 ```js
-<Product />
+<Product name="Bag of Widgets" sku="SKU-1230192" />
 ```
