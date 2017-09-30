@@ -1,5 +1,0 @@
-Product example:
-
-```js
-<Product />
-```
