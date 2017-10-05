@@ -89,7 +89,7 @@
     ],
     "globals": {
       "ts-jest": {
-        "tsConfigFile": "/home/cbass/Projects/pratura/customer_frontend/tsconfig.test.json"
+        "tsConfigFile": "tsconfig.test.json"
       }
     }
   },
