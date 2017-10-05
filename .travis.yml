@@ -1,8 +1,11 @@
-language: java
-
-jdk:
-  - oraclejdk8
-  - openjdk8
-
-os:
-  - linux
+matrix:
+  include:
+    - language: java
+      jdk:
+        - oraclejdk8
+        - openjdk8
+      os:
+        - linux
+    - language: node_js
+      before_script:
+        - cd customer_frontend/
