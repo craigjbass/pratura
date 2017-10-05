@@ -13,3 +13,4 @@ matrix:
         - "iojs"
       before_script:
         - cd customer_frontend/
+        - npm install
