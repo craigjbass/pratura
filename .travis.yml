@@ -7,5 +7,9 @@ matrix:
       os:
         - linux
     - language: node_js
+      node_js:
+        - "8"
+        - "7"
+        - "iojs"
       before_script:
         - cd customer_frontend/
