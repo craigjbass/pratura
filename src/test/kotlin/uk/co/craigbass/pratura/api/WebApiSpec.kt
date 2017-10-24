@@ -23,8 +23,7 @@ class WebApiSpec : Spek({
       ).toString())
       .responseString()
 
-    response.httpStatusCode.shouldEqual(200)
-
+    response.statusCode.shouldEqual(200)
     webServer().stop()
   }
 
