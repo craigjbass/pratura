@@ -30,7 +30,8 @@ abstract class Pratura : Application() {
     return when (useCase) {
       AddItemToBasket::class -> uk.co.craigbass.pratura.usecase.basket.AddItemToBasket(
         basketWriter,
-        basketReader
+        basketReader,
+        productRetriever
       )
       ViewBasket::class -> uk.co.craigbass.pratura.usecase.basket.ViewBasket(
         basketReader,

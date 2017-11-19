@@ -42,6 +42,44 @@ class BasketSpec : Spek({
       )
     }
 
+    given("basket does not exist") {
+      var basketResponse:AddItemToBasket.Response? = null
+
+      beforeEachTest {
+        basketResponse = pratura().executeUseCase(
+          AddItemToBasket::class,
+          AddItemToBasket.Request(
+            basketId = "404",
+            quantity = 1,
+            sku = "productsku"
+          )
+        )
+      }
+
+      it("should respond with basket not found error") {
+        basketResponse!!.errors.shouldContain("BASKET_NOT_FOUND")
+      }
+    }
+
+    given("item is not a valid product") {
+      var basketResponse:AddItemToBasket.Response? = null
+
+      beforeEachTest {
+        basketResponse = pratura().executeUseCase(
+          AddItemToBasket::class,
+          AddItemToBasket.Request(
+            basketId = basketId(),
+            quantity = 1,
+            sku = "this product does not exist"
+          )
+        )
+      }
+
+      it("should respond with basket not found error") {
+        basketResponse!!.errors.shouldContain("PRODUCT_NOT_FOUND")
+      }
+    }
+
     given("one item is in the basket") {
       beforeEachTest {
         pratura().executeUseCase(
