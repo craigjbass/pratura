@@ -2,21 +2,35 @@ package uk.co.craigbass.pratura.usecase.basket
 
 import uk.co.craigbass.pratura.boundary.basket.AddItemToBasket
 import uk.co.craigbass.pratura.boundary.basket.AddItemToBasket.*
-import uk.co.craigbass.pratura.domain.BasketItem
-import uk.co.craigbass.pratura.usecase.BasketReader
+import uk.co.craigbass.pratura.domain.*
+import uk.co.craigbass.pratura.usecase.*
 
 class AddItemToBasket(private val basketWriter: BasketWriter,
-                      private val basketReader: BasketReader) : AddItemToBasket {
+                      private val basketReader: BasketReader,
+                      private val productRetriever: ProductRetriever) : AddItemToBasket {
   lateinit var request: AddItemToBasket.Request
 
   override fun execute(request: Request): Response {
     this.request = request
 
     if (`basketNotFound?`()) return basketNotFound()
+    if (`isProductPurchasable?`(request.sku)) return productNotFound()
 
     save(getBasketItemToSave())
 
     return success()
+  }
+
+  private fun productNotFound() = Response(setOf("PRODUCT_NOT_FOUND"))
+
+  private fun `isProductPurchasable?`(sku: String): Boolean {
+    return findProduct(sku) == null
+  }
+
+  private fun findProduct(sku: String): Product? {
+    return productRetriever
+      .all()
+      .find { product -> product.sku == sku }
   }
 
   private fun `basketNotFound?`() = !basketReader.`basketExists?`(basketId())

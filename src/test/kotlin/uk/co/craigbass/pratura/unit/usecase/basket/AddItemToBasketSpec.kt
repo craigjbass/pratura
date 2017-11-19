@@ -4,13 +4,15 @@ import org.amshove.kluent.*
 import org.jetbrains.spek.api.Spek
 import org.jetbrains.spek.api.dsl.*
 import uk.co.craigbass.pratura.boundary.basket.AddItemToBasket.Request
-import uk.co.craigbass.pratura.domain.BasketItem
-import uk.co.craigbass.pratura.unit.testdouble.StubBasketReader
+import uk.co.craigbass.pratura.domain.*
+import uk.co.craigbass.pratura.unit.testdouble.*
 import uk.co.craigbass.pratura.unit.usecase.basket.testdouble.SpyBasketItemsWriter
 import uk.co.craigbass.pratura.usecase.basket.AddItemToBasket
+import java.math.BigDecimal
 
 class AddItemToBasketSpec : Spek({
   var baskets: Map<String, List<BasketItem>>? = null
+  var products: List<Product>? = null
   val basketWriter = memoized { SpyBasketItemsWriter() }
   val basketReader = memoized {
     StubBasketReader(baskets!!)
@@ -18,7 +20,14 @@ class AddItemToBasketSpec : Spek({
   val addItemToBasket = memoized {
     AddItemToBasket(
       basketWriter(),
-      basketReader()
+      basketReader(),
+      StubProductRetriever(products!!)
+    )
+  }
+
+  beforeEachTest {
+    products = listOf(
+      Product("sku", BigDecimal.ZERO, "")
     )
   }
 
@@ -30,6 +39,36 @@ class AddItemToBasketSpec : Spek({
 
     it("should fail with a basket not found error") {
       response().errors.shouldContain("BASKET_NOT_FOUND")
+    }
+
+    given("product does not exist") {
+      beforeEachTest {
+        products = listOf()
+      }
+
+      it("should fail with a basket not found error") {
+        response().errors.shouldContain("BASKET_NOT_FOUND")
+      }
+    }
+  }
+
+  given("basket contains nothing and product does not exist") {
+    beforeEachTest {
+      products = listOf()
+      baskets = mapOf(Pair("an-id-that-exists", listOf()))
+    }
+    val response = memoized {
+      addItemToBasket().execute(
+        Request(
+          quantity = 1,
+          basketId = "an-id-that-exists",
+          sku = "unobtainium"
+        )
+      )
+    }
+
+    it("responds with a product not found error") {
+      response().errors.shouldContain("PRODUCT_NOT_FOUND")
     }
   }
 
